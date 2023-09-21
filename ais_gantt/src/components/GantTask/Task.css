@@ -1,0 +1,22 @@
+.gantt-taskbar-hidden {
+    background-color: rgba(0,0,0,0.08) !important;
+    box-shadow: none;
+    color: rgba(0,0,0,.2) !important;
+    box-sizing: border-box;
+}
+
+.gantt-taskbar {
+
+}
+
+span {
+    flex-shrink: 1;
+    flex-grow: 1;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-indent: 0;
+    box-sizing: border-box;
+    padding-left: 5px;
+}

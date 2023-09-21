@@ -1,0 +1,124 @@
+.calendar-header {
+    display: flex;
+    border-bottom: 1px solid #999;
+    height: 110px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.03);
+}
+
+.timing-toolbar-item {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.timing-toolbar-item:hover {
+    background-color:rgba(0,0,0,.04);
+}
+
+.timing-toolbar {
+    margin: 5px;
+    position: relative;
+    flex: 1;
+}
+
+.timing-toolbar::after {
+    display: block;
+    position: absolute;
+    height: 50%;
+    border-left: 1px solid #CCC;
+    width: 0;
+    content: "";
+    top: 25%;
+    left: 50%;
+}
+
+.timing-toolbar:hover::after {
+    display: none;
+}
+
+/* .chart-calendar {
+
+} */
+
+.buttonbar {
+    height: 20px;
+}
+
+.buttonbar input[type="button"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    padding: 0;
+    border: 0;
+    color: transparent;
+    cursor: pointer;
+    margin: 0;
+    box-sizing: content-box;
+    transition: all .2s ease;
+}
+
+.buttonbar input[type="button"]:first-child {
+    background: url("../../../public/arrow-down.svg");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.buttonbar input[type="button"]:nth-child(2) {
+    background: url("../../../public/arrow-up.svg");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.buttonbar input[type="button"]:hover {
+    background-color:#bbfcfa;
+}
+.calheader-row {
+    position: relative;
+    width: 100%;
+    border: 0;
+}
+
+.year-row-label-box {
+    display: inline-flex;
+    position: absolute;
+    top: 0;
+    height: 100% !important;
+    border-left: 1px solid #999;
+    /* border-top: 1px solid #999; */
+    text-align: left;
+    color: #000;
+    white-space: nowrap;
+}
+
+.calheader-label {
+    display: inline-block;
+    padding: 0 5px;
+    height: 100%;
+    max-width: 120px;
+    flex-grow: 1;
+    font-size: 14px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+
+.datePicker {
+    visibility: hidden;
+    height: 0;
+    padding: 0;
+    width: 0;
+    position: absolute;
+    top: 0px;
+  }
+

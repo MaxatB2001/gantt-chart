@@ -1,0 +1,54 @@
+.task-row {
+    display: flex;
+    height: 24px;
+    border-top: 1px solid rgba(0,0,0,0.3);
+}
+
+.task-row:last-child {
+    border-bottom: 1px solid #ddd;
+  }
+
+.task-row-label {
+    display: flex;
+    text-align: left;
+    overflow: hidden;
+    color: #000;
+    font-size: 12px;
+    border-right: 1px solid #ddd;
+    position: relative;
+    height: 100%;
+    font-weight: 600;
+}
+
+.task-row-text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    padding: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 23px;
+}
+
+
+.task-container {
+    position: relative;
+  }
+
+.task-row-label-btn {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background-image: url("../../../public/arrow.svg");
+    background-repeat: no-repeat;
+    background-size: 10px;
+    background-position: center;
+    margin-left: 0 !important;
+    opacity: .7;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.group-collapsed {
+    transform: rotate(-45deg);
+}
