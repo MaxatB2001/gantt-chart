@@ -27,6 +27,6 @@ export class TaskSchema {
   projectUid: string;
   @Column({ nullable: true })
   parentId: number | null;
-  @OneToMany(type => TaskDataFieldValue,  dataValue => dataValue.task, {eager: true})
+  @OneToMany(type => TaskDataFieldValue,  dataValue => dataValue.task, {eager: true, cascade: true})
   taskDataValues: TaskDataFieldValue[]
 }

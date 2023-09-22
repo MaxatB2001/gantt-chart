@@ -18,7 +18,7 @@ const ResourceRow = ({ resource, projectId }: ResourceRowProps) => {
       {grouppedTasks.map((tasks, index) => (
         <div
         className="resource-row"
-          onClick={() => console.log(index)}
+          // onClick={() => console.log(index)}
           key={index}
           style={{ height: index == 0 ? "24px" : "16px", position: "relative", display: "flex", borderTop: index == 0 ? "1px solid rgba(0,0,0,0.3)" : "" }}
         >
@@ -30,9 +30,9 @@ const ResourceRow = ({ resource, projectId }: ResourceRowProps) => {
           >
             <div className="resource-row-text">{index == 0 ? resource.name : ""}</div>
           </div>
-          <div style={{position: "relative",}}>
+          <div style={{position: "relative", flex: 1}}>
             {tasks.map((task) => (
-              <GanttTask key={task.id} task={task} rowIndex={index} projectId={projectId}/>
+              <GanttTask key={task.uid} task={task} rowIndex={index} projectId={projectId}/>
             ))}
           </div>
         </div>

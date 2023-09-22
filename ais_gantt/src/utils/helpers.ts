@@ -49,10 +49,10 @@ export const calculateDifferenceInDays = (startDate: number, endDate: number) =>
 }
 
 export const buildTaskTree = (tasks: Task[]) => {
-  const tree = new Map<number, Task>()
+  const tree = new Map<string, Task>()
 
   tasks.forEach(task => {
-    const {id, parentId} = task
+    const {uid, parentId} = task
     const node: Task = {
       ...task,
       children: [],
@@ -60,7 +60,7 @@ export const buildTaskTree = (tasks: Task[]) => {
       isOpen: true
     }
 
-    tree.set(id, node)
+    tree.set(uid, node)
 
     if (parentId) {
       const parent = tree.get(parentId);
@@ -72,7 +72,7 @@ export const buildTaskTree = (tasks: Task[]) => {
         } else {
           parent.children = [tempNode]
         }
-        tree.set(tempNode.id, tempNode)
+        tree.set(tempNode.uid, tempNode)
       }
     }
   })
@@ -90,28 +90,28 @@ export const buildTaskTree = (tasks: Task[]) => {
     
 // }
 
-export const updateObjectInTree = (tree: Task[], id: number, newData: any) => {
-   if (!tree || tree.length === 0) {
-    console.log("NO TRREE");
+// export const updateObjectInTree = (tree: Task[], id: number, newData: any) => {
+//    if (!tree || tree.length === 0) {
+//     console.log("NO TRREE");
     
-    return
-   }
+//     return
+//    }
 
-   for (let i = 0; i < tree.length; i++) {
-    const rootNode = tree[i]
-    console.log(rootNode);
+//    for (let i = 0; i < tree.length; i++) {
+//     const rootNode = tree[i]
+//     console.log(rootNode);
     
-    if (rootNode.id === id) {
-      Object.assign(rootNode, newData)
-      // return 
-    }
+//     if (rootNode.uid === id) {
+//       Object.assign(rootNode, newData)
+//       // return 
+//     }
 
-    if (rootNode.children && rootNode.children.length > 0) {
-      updateObjectInTree(rootNode.children, id, newData)
-    }
-   }
-}
+//     if (rootNode.children && rootNode.children.length > 0) {
+//       updateObjectInTree(rootNode.children, id, newData)
+//     }
+//    }
+// }
 
 export const getElementTopOffset = (event:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  console.log((event.target as HTMLElement).getBoundingClientRect().top)
+  return (event.target as HTMLElement).getBoundingClientRect()
 }

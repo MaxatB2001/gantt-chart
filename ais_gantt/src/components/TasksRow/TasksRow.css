@@ -33,6 +33,7 @@
 
 .task-container {
     position: relative;
+    flex: 1;
   }
 
 .task-row-label-btn {

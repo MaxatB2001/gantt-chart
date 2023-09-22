@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { TaskManagementService } from './task_management.service';
 import { TaskDto } from 'src/DTO/task.dto';
 import { ViewDto } from 'src/DTO/view.dto';
 import { getMetadataArgsStorage } from 'typeorm';
 import { DataFieldDto } from 'src/DTO/data-field.dto';
 import { DataFieldValueDto } from 'src/DTO/data-field-value.dto';
+import { TaskSchema } from 'src/schemas/Task.schema';
 
 @Controller('task-management')
 export class TaskManagementController {
@@ -27,6 +28,16 @@ export class TaskManagementController {
     // console.log(entityPropertiesMap);
     // return entityPropertiesMap;
     return this.taskManagementService.getTasks()
+  }
+
+  @Get("/task/:uid")
+  getTask(@Param("uid") uid: string) {
+    return this.taskManagementService.getTask(uid)
+  }
+
+  @Delete("task/:uid")
+  deleteTask(@Param("uid") uid: string) {
+    return this.taskManagementService.deleteTask(uid)
   }
 
   @Post('/view')
@@ -52,5 +63,10 @@ export class TaskManagementController {
   @Get("/init")
   init() {
     return this.taskManagementService.init()
+  }
+
+  @Put("/task")
+  updateTask(@Body() task: TaskSchema) {
+    return this.taskManagementService.updateTask(task)
   }
 }

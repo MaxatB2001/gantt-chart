@@ -27,11 +27,11 @@ const TasksRow = ({ task }: TaskRowProps) => {
           ></span>
         </div>
         <div className="task-container">
-          <GanttTask rowIndex={0} key={task.id} task={task} />
+          <GanttTask rowIndex={0} key={task.uid} task={task} />
         </div>
       </div>
       {isOpen &&
-        task.children?.map((child) => <TasksRow key={child.id} task={child} />)}
+        task.children?.map((child) => <TasksRow key={child.uid} task={child} />)}
     </>
   );
 };

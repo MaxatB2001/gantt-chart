@@ -13,6 +13,34 @@ import { TaskDataFieldValue } from 'src/schemas/TaskDataFieldValue.schema';
 import { ViewSchema } from 'src/schemas/View.schema';
 import { Repository } from 'typeorm';
 
+const resourses = [
+  {
+    id: "2bd34e3e-23da-4392-9dd1-f3c3ee32d9c6",
+    name: "Юзер1",
+    tasks: []
+},
+{
+    id: "2bd34e3e-23da-4392-9dz2-f3c3ee32d9c6",
+    name: "Юзер2",
+    tasks: []        
+},
+{
+    id: "2bd34e3e-23da-4392-9dz2-f3c3ee32d2c6",
+    name: "Юзер3",
+    tasks: []
+},
+{
+    id: "2bd34e3e-23da-4392-9dz2-f3c3ee32d2v6",
+    name: "Ильдар",
+    tasks: []
+},
+{
+    id: "2bd34e3e-23da-4392-9dz2-f3c3zz32d2v6",
+    name: "Веня",
+    tasks: []
+}
+]
+
 @Injectable()
 export class TaskManagementService {
   constructor(
@@ -30,14 +58,21 @@ export class TaskManagementService {
 
   async init() {
     const TaskDataFields = await this.taskDataFieldRepo.find()
-    const tasks = await this.taskRepo.find()
+    const tasks = await this.taskRepo.find({
+      // where: {
+      //   taskDataValues: {
+      //     value: ""
+      //   }
+      // }
+    })
     const projects = await lastValueFrom(this.projectListClient.send("get-projects", {}))
     console.log(projects);
     
     return {
       projects,
       TaskDataFields,
-      tasks
+      tasks,
+      resourses
     } 
   }
 
@@ -54,8 +89,17 @@ export class TaskManagementService {
     return groupBy(tasks, view.groupBy);
   }
 
+  async getTask(uid: string) {
+    return this.taskRepo.findOne({where: {uid}})
+  }
+
+  
   async createTask(taskDto: TaskDto) {
     return await this.taskRepo.save(taskDto);
+  }
+
+  async deleteTask(uid: string) {
+    return await this.taskRepo.delete(uid)
   }
 
   async createView(viewDto: ViewDto) {
@@ -64,6 +108,10 @@ export class TaskManagementService {
 
   async getViews() {
     return await this.viewRepo.find();
+  }
+
+  async updateView() {
+    
   }
 
   async createTaskDataField(dataFieldDto: DataFieldDto) {
@@ -78,5 +126,13 @@ export class TaskManagementService {
 
   async getTaskDataFields() {
     return await this.taskDataFieldRepo.find()
+  }
+
+  async updateTask(task: TaskSchema) {
+    return await this.taskRepo.save(task)
+  }
+
+  async applyFilter() {
+
   }
 }

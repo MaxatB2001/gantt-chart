@@ -9,20 +9,29 @@ import Project from "./pages/Project.tsx";
 import AppRouter from "./components/AppRouter.tsx";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak.ts";
+import DialogContextProvider from "./contexts/Dialog.context.tsx";
+import MetadataContextProvider, {
+} from "./contexts/MetaData.context.tsx";
 moment.locale("ru");
 
 function App() {
   return (
     <>
-     {/* <ReactKeycloakProvider authClient={keycloak}> */}
-     <GroupContextPovider>
-        <Xwrapper>
-          <CalendarHeader startDate={1693515600000} endDate={1696107600000} />
-            <AppRouter/>
-        </Xwrapper>
-      </GroupContextPovider>
-     {/* </ReactKeycloakProvider> */}
-      
+      {/* <ReactKeycloakProvider authClient={keycloak}> */}
+      <MetadataContextProvider>
+        <DialogContextProvider>
+          <GroupContextPovider>
+            <Xwrapper>
+              <CalendarHeader
+                startDate={1693515600000}
+                endDate={1696107600000}
+              />
+              <AppRouter />
+            </Xwrapper>
+          </GroupContextPovider>
+        </DialogContextProvider>
+      </MetadataContextProvider>
+      {/* </ReactKeycloakProvider> */}
     </>
   );
 }

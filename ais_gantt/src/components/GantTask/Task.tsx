@@ -2,7 +2,8 @@ import { useXarrow } from "react-xarrows";
 import { Task } from "../../models/Task";
 import { calculateDifferenceInDays, getElementTopOffset } from "../../utils/helpers";
 import "./Task.css";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { DialogContext } from "../../contexts/Dialog.context";
 
 type TaskProps = {
   task: Task;
@@ -13,6 +14,14 @@ type TaskProps = {
 const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
   const updateXarrow = useXarrow();
   const testStart = 1693515600000;
+  const dialogContext = useContext(DialogContext)
+
+  const openDialog = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(getElementTopOffset(event).bottom, task.uid);
+    
+    const top = getElementTopOffset(event).bottom
+    dialogContext?.setDialogState({top, taskUid: task.uid})
+  }
 
   useEffect(() => {
     return () => {
@@ -22,14 +31,14 @@ const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
 
   return (
     <div
-      onClick={(event) => getElementTopOffset(event)}
-      id={task.id.toString()}
+      onClick={openDialog}
+      id={task.uid}
       className={
         !projectId
-          ? ""
+          ? "gantt-taskbar"
           : projectId == task.projectUid
-          ? ""
-          : "gantt-taskbar-hidden"
+          ? "gantt-taskbar"
+          : "gantt-taskbar-hidden" + " gantt-taskbar"
       }
       style={{
         height: "15px",

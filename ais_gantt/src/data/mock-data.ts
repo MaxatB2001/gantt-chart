@@ -229,6 +229,12 @@ export const resources: Resource[] = [
         id: "2bd34e3e-23da-4392-9dz2-f3c3ee32d2v6",
         name: "Ильдар",
         tasks: []
+    },
+    {
+        id: "2bd34e3e-23da-4392-9dz2-f3c3zz32d2v6",
+        name: "Веня",
+        tasks: []
     }
+    
     
 ]
