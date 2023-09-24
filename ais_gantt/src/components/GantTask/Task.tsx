@@ -1,4 +1,4 @@
-import { useXarrow } from "react-xarrows";
+// import { useXarrow } from "react-xarrows";
 import { Task } from "../../models/Task";
 import { calculateDifferenceInDays, getElementTopOffset } from "../../utils/helpers";
 import "./Task.css";
@@ -12,7 +12,7 @@ type TaskProps = {
 };
 
 const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
-  const updateXarrow = useXarrow();
+  // const updateXarrow = useXarrow();
   const testStart = 1693515600000;
   const dialogContext = useContext(DialogContext)
 

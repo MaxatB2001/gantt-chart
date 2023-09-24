@@ -1,16 +1,14 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import TasksRow from "../components/TasksRow/TasksRow";
-import { projects, tasks } from "../data/mock-data";
 import {
   buildTaskTree,
   calculateDifferenceInDays,
 } from "../utils/helpers";
-import { Task } from "../models/Task";
 import GroupRow from "../components/GroupRow/GroupRow";
-import { Project } from "../models/Project";
 import { GroupContext } from "../contexts/Tasks.context";
 import { init } from "../api/task-queries";
 import Dialog from "../components/Dialog/Dialog";
+
 
 const ProjectC = (props: { startDate: number; endDate: number }) => {
   // const tree = buildTaskTree(tasks);
@@ -48,6 +46,7 @@ const ProjectC = (props: { startDate: number; endDate: number }) => {
   return (
     <div style={{ position: "relative" }}>
       {[...Array(differnceInDays)].map((x, i) => {
+        console.log(x)
         return (
           <span
             key={i}

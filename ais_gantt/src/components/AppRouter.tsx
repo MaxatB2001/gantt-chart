@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import CalendarHeader from "./CalendarHeader/CalendarHeader";
+// import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import Project from "../pages/Project";
 import GantChart from "../pages/GantChart";
-import PrivateRoute from "./PrivateRoute";
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloak from "../Keycloak";
+// import PrivateRoute from "./PrivateRoute";
+// import { ReactKeycloakProvider } from "@react-keycloak/web";
+// import keycloak from "../Keycloak";
 
 const AppRouter = () => {
   return (
