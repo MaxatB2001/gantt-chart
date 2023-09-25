@@ -1,0 +1,22 @@
+.list-item {
+    background-color: #f3f3f3;
+    line-height: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+    transition: all .3s ease;
+}
+
+.list-item-label {
+    display: inline-block;
+    width: 180px;
+    margin: 0 5px;
+    padding-right: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-position: right 2px top 7px;
+    background-size: 16px;
+    background-repeat: no-repeat;
+    vertical-align: top;
+    transition: all .3s ease;
+}

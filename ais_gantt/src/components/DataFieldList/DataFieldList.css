@@ -1,0 +1,5 @@
+.data-field-list {
+    column-count: 2;
+    padding: 10px 10px 5px 10px;
+    display: table-cell;
+}

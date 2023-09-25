@@ -12,6 +12,7 @@ import AppRouter from "./components/AppRouter.tsx";
 import DialogContextProvider from "./contexts/Dialog.context.tsx";
 import MetadataContextProvider, {
 } from "./contexts/MetaData.context.tsx";
+import ChartActionBar from "./components/ChartActionBar/ChartActionBar.tsx";
 moment.locale("ru");
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <DialogContextProvider>
           <GroupContextPovider>
             <Xwrapper>
+              <ChartActionBar/>
               <CalendarHeader
                 startDate={1693515600000}
                 endDate={1696107600000}

@@ -1,0 +1,44 @@
+.data-field-types {
+    padding: 10px 10px 5px 10px;
+    vertical-align: top;
+    position: relative;
+    display: table-cell;
+}
+
+.list-button {
+    width: 150px;
+    background-color: transparent;
+    color: #000;
+    height: 30px;
+    line-height: 28px;
+    font-weight: 500;
+    border: 1px solid #000;
+    margin: 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.list-button-icon {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    vertical-align: top;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px 16px;
+}
+
+.list-button>span {
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 28px;
+    margin: 0 5px;
+}
+
+.list-button:not(.selected):hover {
+    background-color: #D9F0FF;
+}

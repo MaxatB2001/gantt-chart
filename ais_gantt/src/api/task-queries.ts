@@ -23,3 +23,14 @@ export const updateTask = async (task: Task) => {
     })
     return await response.json()
 }
+
+export const addDataField = async (body: {name: string, type: string}) => {
+    const response = await fetch(`http://localhost:49600/task-management/data-field`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+    })
+    return await response.json()
+}

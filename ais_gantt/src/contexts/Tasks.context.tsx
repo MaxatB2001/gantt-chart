@@ -24,7 +24,7 @@ const GroupContextPovider = ({ children }: GroupContextProps) => {
 
   useEffect(() => {
     setLinks([
-      <Xarrow key={1} start={"2"} end={"3"} path="grid" strokeWidth={2} />,
+      // <Xarrow key={1} start={"2"} end={"3"} path="grid" strokeWidth={2} />,
     ]);
   }, []);
 

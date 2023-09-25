@@ -1,0 +1,31 @@
+.action-bar {
+    align-items: center;
+}
+
+.action-bar-btn {
+    position: relative;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.action-bar-btn:hover {
+    background-color: #D9F0FF;
+}
+
+.grouping {
+    background-image: url("../../../public/grouping.svg");
+}
+
+.action-loolbar {
+    background-color: blue;
+}

@@ -5,6 +5,7 @@ import { MetadataContext } from "../../contexts/MetaData.context";
 // import { TaskDataValues } from "../../models/TaskDataValues";
 import { getTask, updateTask } from "../../api/task-queries";
 import { Task } from "../../models/Task";
+import DialogButton from "../DialogButton/DialogButton";
 
 const Dialog = () => {
   const dialogContext = useContext(DialogContext);
@@ -26,35 +27,47 @@ const Dialog = () => {
   };
 
   const saveTask = () => {
-    updateTask(task).then(data => {
-      console.log(data)
-      closeDialog()
-    })
-  }
+    updateTask(task).then((data) => {
+      console.log(data);
+      closeDialog();
+    });
+  };
 
   const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(task.taskDataValues);
-    
-    setTask({...task, taskDataValues: task.taskDataValues.map(tdv => {
-      if (tdv.taskDataFieldUId == event.target.id) {
-        return {...tdv, value: event.target.value}
-      } else {
-        return tdv
-      }
-    })})
-  }
+    setTask({
+      ...task,
+      taskDataValues: task.taskDataValues.map((tdv) => {
+        if (tdv.taskDataFieldUId == event.target.id) {
+          return { ...tdv, value: event.target.value };
+        } else {
+          return tdv;
+        }
+      }),
+    });
+  };
 
   useEffect(() => {
     if (dialogContext?.dialogState?.taskUid) {
       getTask(dialogContext?.dialogState?.taskUid).then((task) => {
-        if (metaDataContext?.metaData && task.taskDataValues.length < metaDataContext?.metaData?.taskDataFields.length) {
-          metaDataContext?.metaData?.taskDataFields.forEach(tdf => {
+        if (
+          metaDataContext?.metaData &&
+          task.taskDataValues.length <
+            metaDataContext?.metaData?.taskDataFields.length
+        ) {
+          metaDataContext?.metaData?.taskDataFields.forEach((tdf) => {
             console.log(tdf, "TDF");
-            
-            if (task.taskDataValues.findIndex(tdv => tdv.taskDataFieldUId == tdf.uid) < 0) {
-              task.taskDataValues.push({taskDataFieldUId: tdf.uid, value: ""})
+
+            if (
+              task.taskDataValues.findIndex(
+                (tdv) => tdv.taskDataFieldUId == tdf.uid
+              ) < 0
+            ) {
+              task.taskDataValues.push({
+                taskDataFieldUId: tdf.uid,
+                value: "",
+              });
             }
-          })
+          });
         }
         console.log(task);
         setTask(task);
@@ -62,49 +75,71 @@ const Dialog = () => {
     }
   }, [dialogContext?.dialogState]);
 
+  //  let currentTab = tabs[activeTab];
+
   if (!dialogContext?.dialogState) {
     return null;
   } else {
     return (
       <div
         className="dialog"
-        style={{ top: dialogContext.dialogState.top - 110 }}
+        style={{ top: dialogContext.dialogState.top - 150 }}
       >
-        <div className="dialog-header">
-          <div className="dialog-header-left">
-            <div className="dialog-title">Задача</div>
-            <div onClick={saveTask} className="dialog-save-btn">Сохранить</div>
-            <div></div>
-          </div>
-          <div onClick={closeDialog} className="dialog-close-btn"></div>
-        </div>
-        <div className="dialog-content">
-          <div>Название</div>
-          <input
-            onChange={(event) => {
-              if (task) {
-                setTask({ ...task, title: event.target.value });
-              }
-            }}
-            value={task?.title}
-          />
-          {metaDataContext?.metaData?.taskDataFields.map((df) => (
-            <div key={df.uid}>
-              <div>{df.name}</div>
-              <input
-                id={df.uid}
-                value={
-                  task.taskDataValues.length > 0
-                    ? task.taskDataValues.find(
-                        (tdv) => tdv.taskDataFieldUId == df.uid
-                      )?.value
-                    : ""
+        {dialogContext.history.length < 1 && (
+          <>
+            <div className="dialog-header">
+              <div className="dialog-header-left">
+                <div
+                  onClick={dialogContext.handleBackClick}
+                  className="dialog-close"
+                ></div>
+                <div className="dialog-title">Задача</div>
+                <DialogButton onClick={saveTask} text="Сохранить" />
+                {dialogContext.tabs.map((tab, index) => {
+                  return (tab.label && <div
+                    key={tab.label}
+                    onClick={() => dialogContext.handleTabClick(tab.path)}
+                    className="action-udf action-btn"
+                  >
+                    <span className={tab.className}></span>
+                    {tab.label}
+                  </div>)
                 }
-                onChange={onValueChange}
-              />
+                 
+                )}
+              </div>
+              <div onClick={closeDialog} className="dialog-close-btn"></div>
             </div>
-          ))}
-        </div>
+            <div className="dialog-content">
+              <div>Название</div>
+              <input
+                onChange={(event) => {
+                  if (task) {
+                    setTask({ ...task, title: event.target.value });
+                  }
+                }}
+                value={task?.title}
+              />
+              {metaDataContext?.metaData?.taskDataFields.map((df) => (
+                <div key={df.uid}>
+                  <div>{df.name}</div>
+                  <input
+                    id={df.uid}
+                    value={
+                      task.taskDataValues.length > 0
+                        ? task.taskDataValues.find(
+                            (tdv) => tdv.taskDataFieldUId == df.uid
+                          )?.value
+                        : ""
+                    }
+                    onChange={onValueChange}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {dialogContext.history.length > 0 && dialogContext.currentTab?.element}
       </div>
     );
   }
