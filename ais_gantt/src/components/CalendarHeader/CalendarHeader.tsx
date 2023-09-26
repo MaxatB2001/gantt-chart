@@ -41,12 +41,12 @@ const CalendarHeader = (props: { startDate: number; endDate: number }) => {
   );
 
   const expandAllGroups = () => {
-    groupContext?.setProjects(groupContext?.projects.map(project => ({...project, isOpen: true})))
+    groupContext?.setGroups(groupContext?.groups.map(group => ({...group, isOpen: true})))
     updateXarrow()
   }
 
   const collapseAllGroups = () => {
-    groupContext?.setProjects(groupContext?.projects.map(project => ({...project, isOpen: false})))
+    groupContext?.setGroups(groupContext?.groups.map(group => ({...group, isOpen: false})))
     updateXarrow()
   }
 

@@ -98,6 +98,7 @@ export class TaskManagementService {
           title: project.name,
           type: "project",
           items: tasks,
+          isOpen: true
         };
       });
 
@@ -111,9 +112,11 @@ export class TaskManagementService {
           user.tasks.some((task) => task.projectUid === project.uid),
         );
         return {
-          ...project,
+          uid: project.uid,
+          title: project.name,
+          type: "project",
           isOpen: true,
-          users,
+          items: users,
         };
       });
       return projectWithUsers;
@@ -122,7 +125,7 @@ export class TaskManagementService {
     if (filter.g == GroupingTypes.DATAFIELD) {
       const udf = await this.taskDataFieldRepo.findOne({where: {uid: filter.udfUid}})
       
-      const grouped: Array<{title: string, uid: string, type: string, items: TaskSchema[]}> = []
+      const grouped: Array<{title: string, uid: string, type: string, isOpen: boolean, items: TaskSchema[]}> = []
 
       for (const task of tasks) {
         for (const dataFieldValue of task.taskDataValues) {
@@ -131,7 +134,7 @@ export class TaskManagementService {
             if (isExist) {
               isExist.items.push(task)
             } else {
-              grouped.push({title: dataFieldValue.value, uid: udf.uid,type: "data-field", items: [task]})
+              grouped.push({title: dataFieldValue.value, uid: dataFieldValue.uid,type: "data-field", isOpen: true, items: [task]})
             }
           }
         }

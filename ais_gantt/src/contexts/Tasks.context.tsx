@@ -6,11 +6,12 @@ import React, {
   useState,
 } from "react";
 import { Project } from "../models/Project";
+import { Group } from "../models/Group";
 // import Xarrow from "react-xarrows";
 
 interface GroupContextType {
-  projects: Project[];
-  setProjects: Dispatch<SetStateAction<Project[]>>;
+  groups: Group[];
+  setGroups: Dispatch<SetStateAction<Group[]>>;
   links: ReactElement[];
 }
 
@@ -19,7 +20,7 @@ export const GroupContext = React.createContext<GroupContextType | null>(null);
 type GroupContextProps = React.PropsWithChildren<{}>;
 
 const GroupContextPovider = ({ children }: GroupContextProps) => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [links, setLinks] = useState<ReactElement[]>([]);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const GroupContextPovider = ({ children }: GroupContextProps) => {
   }, []);
 
   return (
-    <GroupContext.Provider value={{ projects, setProjects, links }}>
+    <GroupContext.Provider value={{ groups, setGroups, links }}>
       {children}
     </GroupContext.Provider>
   );

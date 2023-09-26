@@ -3,23 +3,24 @@ import { GroupContext } from "../../contexts/Tasks.context";
 import { Project } from "../../models/Project";
 import "./GroupRow.css"
 import { useXarrow } from "react-xarrows";
+import { Group } from "../../models/Group";
 
 type GroupRowProps = {
-    project: Project;
+    group: Group;
   };
 
-const GroupRow = ({project}: GroupRowProps) => {
+const GroupRow = ({group}: GroupRowProps) => {
     const groupContext = useContext(GroupContext)
     const updateXarrow = useXarrow();
     const collapseGroup = () => {
-        const updated = groupContext?.projects.map(p => {
-          if (p.uid == project.uid) {
+        const updated = groupContext?.groups.map(p => {
+          if (p.uid == group.uid) {
             return {...p, isOpen: !p.isOpen}
           } 
           return p
         }) || []
     
-        groupContext?.setProjects(updated)
+        groupContext?.setGroups(updated)
         setTimeout(() => {
           updateXarrow()
         })
@@ -29,8 +30,8 @@ const GroupRow = ({project}: GroupRowProps) => {
   return (
     <div className="group-row">
         <div className="group-row-label" style={{ width: "201px"}}>
-            <span className="group-label">{project.fullName}</span>
-            <span onClick={() => collapseGroup()} className={"group-row-label-btn" + (project.isOpen ? "" : " group-collapsed")}></span>
+            <span className="group-label">{group.title}</span>
+            <span onClick={() => collapseGroup()} className={"group-row-label-btn" + (group.isOpen ? "" : " group-collapsed")}></span>
         </div>
         <div></div>
     </div>

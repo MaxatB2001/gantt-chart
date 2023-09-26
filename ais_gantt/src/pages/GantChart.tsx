@@ -1,11 +1,12 @@
 // import moment from "moment";
-import { calculateDifferenceInDays, mapTasksToUser } from "../utils/helpers";
+import { buildTaskTree, calculateDifferenceInDays, mapTasksToUser } from "../utils/helpers";
 import ResourceRow from "../components/ResourceRow/ResourceRow";
 import GroupRow from "../components/GroupRow/GroupRow";
 import { Fragment, useContext, useEffect } from "react";
 import { GroupContext } from "../contexts/Tasks.context";
 import { init } from "../api/task-queries";
 import { MetadataContext } from "../contexts/MetaData.context";
+import TasksRow from "../components/TasksRow/TasksRow";
 
 const GantChart = (props: { startDate: number; endDate: number }) => {
   const groupContext = useContext(GroupContext);
@@ -19,26 +20,26 @@ const GantChart = (props: { startDate: number; endDate: number }) => {
   useEffect(() => {
     init().then((data) => {
       console.log(data);
-      const usersWithTasks = mapTasksToUser(data.tasks, data.resourses);
-      const projectWithUsers = data.projects.map((project) => {
-        const users = usersWithTasks.filter((user) =>
-          user.tasks.some((task) => task.projectUid === project.uid)
-        );
+      const tree = buildTaskTree(data.tasks);
+      const pwt = data.projects.map((project) => {
+        const tasks = tree.filter((task) => task.projectUid === project.uid);
         return {
-          ...project,
-          isOpen: true,
-          users,
+          uid: project.uid,
+          title: project.fullName,
+          type: "project",
+          items: tasks,
+          isOpen: true
         };
       });
       
-      groupContext?.setProjects(projectWithUsers);
+      groupContext?.setGroups(pwt);
       metaDataContext?.setMetaData({taskDataFields: data.TaskDataFields})
     });
   }, []);
 
   const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
   console.log(cellWidth);
-  console.log(groupContext?.projects);
+  console.log(groupContext?.groups);
 
   return (
     <div style={{ position: "relative" }}>
@@ -60,16 +61,12 @@ const GantChart = (props: { startDate: number; endDate: number }) => {
         );
       })}
       {groupContext?.links}
-      {groupContext?.projects.map((project) => (
-        <Fragment key={project.uid}>
-          <GroupRow project={project} />
-          {project.isOpen &&
-            project.users.map((user) => (
-              <ResourceRow
-                key={user.id}
-                resource={user}
-                projectId={project.uid}
-              />
+      {groupContext?.groups.map((group) => (
+        <Fragment key={group.uid}>
+          <GroupRow group={group} />
+          {group.isOpen &&
+            group.items.map((item) => (
+              <TasksRow key={item.uid} task={item}/>
             ))}
         </Fragment>
       ))}
