@@ -23,6 +23,7 @@ const ResourceRow = ({ resource, projectId }: ResourceRowProps) => {
           style={{ height: index == 0 ? "24px" : "16px", position: "relative", display: "flex", borderTop: index == 0 ? "1px solid rgba(0,0,0,0.3)" : "" }}
         >
           <div
+          onClick={() => console.log(resource)}
           className="resource-row-label"
             style={{
               width: "201px",

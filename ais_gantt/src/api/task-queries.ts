@@ -34,3 +34,8 @@ export const addDataField = async (body: {name: string, type: string}) => {
     })
     return await response.json()
 }
+
+export const applyFilter = async (filter: any) => {
+    const response = await fetch(`http://localhost:49600/task-management/apply-filter?` + new URLSearchParams(filter).toString())
+    return await response.json()
+}

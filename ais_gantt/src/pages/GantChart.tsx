@@ -4,7 +4,6 @@ import ResourceRow from "../components/ResourceRow/ResourceRow";
 import GroupRow from "../components/GroupRow/GroupRow";
 import { Fragment, useContext, useEffect } from "react";
 import { GroupContext } from "../contexts/Tasks.context";
-import Dialog from "../components/Dialog/Dialog";
 import { init } from "../api/task-queries";
 import { MetadataContext } from "../contexts/MetaData.context";
 
@@ -60,7 +59,6 @@ const GantChart = (props: { startDate: number; endDate: number }) => {
           ></span>
         );
       })}
-      <Dialog />
       {groupContext?.links}
       {groupContext?.projects.map((project) => (
         <Fragment key={project.uid}>

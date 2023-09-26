@@ -13,6 +13,7 @@ import DialogContextProvider from "./contexts/Dialog.context.tsx";
 import MetadataContextProvider, {
 } from "./contexts/MetaData.context.tsx";
 import ChartActionBar from "./components/ChartActionBar/ChartActionBar.tsx";
+import Dialog from "./components/Dialog/Dialog.tsx";
 moment.locale("ru");
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                 startDate={1693515600000}
                 endDate={1696107600000}
               />
+              <Dialog />
               <AppRouter />
             </Xwrapper>
           </GroupContextPovider>

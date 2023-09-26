@@ -24,7 +24,7 @@ const AddDataField = () => {
             onClick={dialogContext?.handleBackClick}
             className="dialog-close"
           ></div>
-          <div className="dialog-title">Поля данных</div>
+          <div className="dialog-title">Создать поле</div>
           <DialogButton
             onClick={() => submit()}
             text="Сохранить"

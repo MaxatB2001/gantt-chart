@@ -27,5 +27,75 @@
 }
 
 .action-loolbar {
-    background-color: blue;
+    transition: all .3s ease;
+    border-bottom: 1px solid #999;
+    box-shadow: 0 4px 0 rgb(0 0 0 / 3%);
+}
+
+.toolbar-content {
+    padding: 10px;
+}
+
+.toolbar-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.toolbar-data {
+    font-size: 14px;
+    line-height: 30px;
+    display: flex;
+}
+
+.toolbar-field-label {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 40px;
+    min-width: 110px;
+    color: #000;
+    vertical-align: middle;
+}
+
+.toolbar-field-data {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 40px;
+    font-weight: 700;
+    color: #444;
+}
+
+.toolbar-list-button {
+    font-weight: 600;
+    line-height: normal;
+    background-color: transparent;
+    color: #000;
+    height: 30px;
+    border: 1px solid #000;
+    margin: 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.toolbar-list-button > span {
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 28px;
+    margin: 0 5px;
+}
+
+.toolbar-list-button:hover {
+    background-color: #0d9542;
+    color: #fff;
+}
+
+.selected {
+    background-color: #0d9542;
+    border-color: #0d9542;
+    color: #fff;
 }

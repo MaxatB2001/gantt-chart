@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TaskManagementService } from './task_management.service';
 import { TaskDto } from 'src/DTO/task.dto';
 import { ViewDto } from 'src/DTO/view.dto';
@@ -6,6 +6,8 @@ import { getMetadataArgsStorage } from 'typeorm';
 import { DataFieldDto } from 'src/DTO/data-field.dto';
 import { DataFieldValueDto } from 'src/DTO/data-field-value.dto';
 import { TaskSchema } from 'src/schemas/Task.schema';
+import { GroupingTypes } from 'src/enums/grouping.-types.enum';
+import { Filter } from 'src/interfaces/Filter';
 
 @Controller('task-management')
 export class TaskManagementController {
@@ -16,8 +18,8 @@ export class TaskManagementController {
     return this.taskManagementService.createTask(taskDto);
   }
 
-  @Get('/task')
-  getTasks() {
+  @Get('/apply-filter')
+  getTasks(@Query() filter: Filter) {    
     // const emeta = getMetadataArgsStorage().tables.map((table) => table.target);
     // const entityPropertiesMap = emeta.map((entity) => ({
     //   entity,
@@ -27,7 +29,7 @@ export class TaskManagementController {
     // }));
     // console.log(entityPropertiesMap);
     // return entityPropertiesMap;
-    return this.taskManagementService.getTasks()
+    return this.taskManagementService.applyFilter(filter)
   }
 
   @Get("/task/:uid")

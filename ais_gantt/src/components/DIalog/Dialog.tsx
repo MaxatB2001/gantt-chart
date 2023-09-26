@@ -83,7 +83,7 @@ const Dialog = () => {
     return (
       <div
         className="dialog"
-        style={{ top: dialogContext.dialogState.top - 150 }}
+        style={{ top: dialogContext.dialogState.top }}
       >
         {dialogContext.history.length < 1 && (
           <>

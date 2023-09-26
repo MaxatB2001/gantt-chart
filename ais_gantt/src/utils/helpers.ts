@@ -113,5 +113,7 @@ export const buildTaskTree = (tasks: Task[]) => {
 // }
 
 export const getElementTopOffset = (event:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  console.log((event.target as HTMLElement).getBoundingClientRect(), "RECT");
+  
   return (event.target as HTMLElement).getBoundingClientRect()
 }
