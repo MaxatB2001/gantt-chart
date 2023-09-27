@@ -65,3 +65,27 @@
     background-position: center; 
 }
 
+.dialog-content {
+    display: flex;
+    width: 100%;
+    gap: 40px;
+    box-sizing: border-box;
+}
+
+.task-type-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-udf-block {
+    /* display: inline-block; */
+    display: grid;
+    grid-auto-rows: 1fr; /* Automatically sized rows */
+    gap: 10px; /* Gap between elements */
+  
+}
+
+.dialog-block {
+
+}

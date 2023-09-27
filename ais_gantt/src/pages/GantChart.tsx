@@ -1,5 +1,5 @@
 // import moment from "moment";
-import { buildTaskTree, calculateDifferenceInDays, mapTasksToUser } from "../utils/helpers";
+import { buildTaskTree, calculateDifferenceInDays, isTask, mapTasksToUser } from "../utils/helpers";
 import ResourceRow from "../components/ResourceRow/ResourceRow";
 import GroupRow from "../components/GroupRow/GroupRow";
 import { Fragment, useContext, useEffect } from "react";
@@ -33,13 +33,12 @@ const GantChart = (props: { startDate: number; endDate: number }) => {
       });
       
       groupContext?.setGroups(pwt);
-      metaDataContext?.setMetaData({taskDataFields: data.TaskDataFields})
+      metaDataContext?.setMetaData({taskDataFields: data.TaskDataFields, projects: data.projects})
     });
   }, []);
 
   const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
   console.log(cellWidth);
-  console.log(groupContext?.groups);
 
   return (
     <div style={{ position: "relative" }}>
@@ -65,9 +64,13 @@ const GantChart = (props: { startDate: number; endDate: number }) => {
         <Fragment key={group.uid}>
           <GroupRow group={group} />
           {group.isOpen &&
-            group.items.map((item) => (
-              <TasksRow key={item.uid} task={item}/>
-            ))}
+            group.items.map(item => {
+              if ( isTask(item)) return <TasksRow key={item.uid} task={item}/>
+              return <ResourceRow key={item.id} resource={item} projectId={group.uid}/>
+            }
+               
+            )
+          }
         </Fragment>
       ))}
     </div>

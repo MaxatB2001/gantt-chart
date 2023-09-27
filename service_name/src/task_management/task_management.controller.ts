@@ -57,6 +57,11 @@ export class TaskManagementController {
     return this.taskManagementService.createTaskDataField(dataFieldDto)
   }
 
+  @Delete("data-field/:uid")
+  deleteDataField(@Param("uid") uid: string) {
+    return this.taskManagementService.deleteDataField(uid)
+  }
+
   @Post("/data-field-value")
   createDataFieldValue(@Body() dataFieldValueDto: DataFieldValueDto) {
     return this.taskManagementService.createTaskDataFieldValue(dataFieldValueDto)

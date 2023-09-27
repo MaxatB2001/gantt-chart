@@ -1,16 +1,18 @@
 import { Resource } from "../models/Resource";
 import { Task } from "../models/Task";
-import moment from "moment"
+import moment from "moment";
+import { TaskDataField } from "../models/TaskDataFields";
+import { TaskDataValues } from "../models/TaskDataValues";
 
 export const mapTasksToUser = (tasks: Task[], resources: Resource[]) => {
-    return resources.map(resource => ({
-        ...resource,
-        tasks: tasks.filter(task => task.userUid == resource.id)
-    }))
-}
+  return resources.map((resource) => ({
+    ...resource,
+    tasks: tasks.filter((task) => task.userUid == resource.id),
+  }));
+};
 
 export function groupTasks(tasks: Task[]): Task[][] {
-    // Step 1: Sort tasks by start date in ascending order
+  // Step 1: Sort tasks by start date in ascending order
   const sortedTasks = tasks.sort((a, b) => a.startDate - b.startDate);
 
   // Step 2: Initialize array to hold groups of tasks
@@ -39,71 +41,107 @@ export function groupTasks(tasks: Task[]): Task[][] {
   }
 
   return taskGroups;
-  }
-  
+}
 
-export const calculateDifferenceInDays = (startDate: number, endDate: number) => {
-    const start = moment(startDate)
-    const end = moment(endDate)
-    return end.diff(start, "days")
+export const calculateDifferenceInDays = (
+  startDate: number,
+  endDate: number
+) => {
+  const start = moment(startDate);
+  const end = moment(endDate);
+  return end.diff(start, "days");
+};
+
+export const calculateTaskWidth = (startDate: number, endDate: number, chartStartDate: number, chartEndDate: number) => {
+
+  const taskStartDate = moment(startDate)
+  const taskEndDate = moment(endDate)
+  const chartStart = moment(chartStartDate)
+  const chartEnd = moment(chartEndDate)
+
+  const isRange1BeyondRange2 = taskStartDate.isBefore(chartStart) || taskEndDate.isAfter(chartEnd);
+
+  if (isRange1BeyondRange2) {
+    const overlapStart = moment.max(moment(startDate), moment(chartStartDate));
+    const overlapEnd = moment.min(moment(endDate), moment(chartEndDate));
+    const duration = moment.duration(overlapEnd.diff(overlapStart));
+    const days = duration.as('days');
+  
+    const overlappingDays = Math.max(0, days );
+    return overlappingDays
+  }
+  const start = moment(startDate);
+  const end = moment(endDate);
+  return end.diff(start, "days");
+};
+
+export const calculateTaskLeftOffset = (taskStartDate: number, chartStartDate: number) => {
+  const start = moment( chartStartDate);
+  const end = moment(taskStartDate);
+  const diff = end.diff(start, "days")
+  // console.log(diff);
+  if (diff < 0) return 0
+  return end.diff(start, "days");
 }
 
 export const buildTaskTree = (tasks: Task[]) => {
-  const tree = new Map<string, Task>()
+  const tree = new Map<string, Task>();
 
-  tasks.forEach(task => {
-    const {uid, parentId} = task
+  tasks.forEach((task) => {
+    const { uid, parentId } = task;
     const node: Task = {
       ...task,
       children: [],
       level: 0,
-      isOpen: true
-    }
+      isOpen: true,
+    };
 
-    tree.set(uid, node)
+    tree.set(uid, node);
 
     if (parentId) {
       const parent = tree.get(parentId);
       if (parent) {
-        const tempNode = {...node, level: parent.level !== undefined ? parent.level + 1 : 0}
+        const tempNode = {
+          ...node,
+          level: parent.level !== undefined ? parent.level + 1 : 0,
+        };
         if (parent?.children) {
           parent.children.push(tempNode);
-          
         } else {
-          parent.children = [tempNode]
+          parent.children = [tempNode];
         }
-        tree.set(tempNode.uid, tempNode)
+        tree.set(tempNode.uid, tempNode);
       }
     }
-  })
+  });
 
-  const roots: Task[] = []
-  tree.forEach(node => {
+  const roots: Task[] = [];
+  tree.forEach((node) => {
     if (!node.parentId) {
-      roots.push(node)
+      roots.push(node);
     }
-  })
+  });
 
-  return roots
-}
+  return roots;
+};
 // export const calculateTaskLeft = (task: Task) => {
-    
+
 // }
 
 // export const updateObjectInTree = (tree: Task[], id: number, newData: any) => {
 //    if (!tree || tree.length === 0) {
 //     console.log("NO TRREE");
-    
+
 //     return
 //    }
 
 //    for (let i = 0; i < tree.length; i++) {
 //     const rootNode = tree[i]
 //     console.log(rootNode);
-    
+
 //     if (rootNode.uid === id) {
 //       Object.assign(rootNode, newData)
-//       // return 
+//       // return
 //     }
 
 //     if (rootNode.children && rootNode.children.length > 0) {
@@ -112,8 +150,20 @@ export const buildTaskTree = (tasks: Task[]) => {
 //    }
 // }
 
-export const getElementTopOffset = (event:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+export const getElementTopOffset = (
+  event: React.MouseEvent<HTMLDivElement, MouseEvent>
+) => {
   console.log((event.target as HTMLElement).getBoundingClientRect(), "RECT");
-  
-  return (event.target as HTMLElement).getBoundingClientRect()
-}
+
+  return (event.target as HTMLElement).getBoundingClientRect();
+};
+
+export const isTask = (element: Task | Resource): element is Task => {
+  return "projectUid" in element;
+};
+
+export const chunkArray = (array: TaskDataField[], size: number) => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
+    array.slice(index * size, index * size + size)
+  );
+};

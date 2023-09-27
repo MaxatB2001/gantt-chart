@@ -170,6 +170,10 @@ export class TaskManagementService {
     return await this.taskDataFieldRepo.save(dataFieldDto);
   }
 
+  async deleteDataField(uid: string) {
+    return await this.taskDataFieldRepo.delete(uid)
+  }
+
   async createTaskDataFieldValue(dataFieldValue: DataFieldValueDto) {
     const task = await this.taskRepo.findOne({
       where: { uid: dataFieldValue.taskUid },

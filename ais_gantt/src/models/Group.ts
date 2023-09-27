@@ -5,6 +5,6 @@ export interface Group {
     uid: string;
     title: string;
     type: string;
-    items: Task[]
+    items: Task[] | Resource[]
     isOpen: boolean
 }

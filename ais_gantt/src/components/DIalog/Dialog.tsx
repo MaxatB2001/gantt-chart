@@ -6,6 +6,9 @@ import { MetadataContext } from "../../contexts/MetaData.context";
 import { getTask, updateTask } from "../../api/task-queries";
 import { Task } from "../../models/Task";
 import DialogButton from "../DialogButton/DialogButton";
+import TextField from "@mui/material/TextField";
+import Autocomplete from '@mui/material/Autocomplete';
+import { Project } from "../../models/Project";
 
 const Dialog = () => {
   const dialogContext = useContext(DialogContext);
@@ -21,6 +24,9 @@ const Dialog = () => {
     parentId: "",
     taskDataValues: [],
   });
+
+  
+
 
   const closeDialog = () => {
     dialogContext?.setDialogState(null);
@@ -81,10 +87,7 @@ const Dialog = () => {
     return null;
   } else {
     return (
-      <div
-        className="dialog"
-        style={{ top: dialogContext.dialogState.top }}
-      >
+      <div className="dialog" style={{ top: dialogContext.dialogState.top }}>
         {dialogContext.history.length < 1 && (
           <>
             <div className="dialog-header">
@@ -96,46 +99,72 @@ const Dialog = () => {
                 <div className="dialog-title">Задача</div>
                 <DialogButton onClick={saveTask} text="Сохранить" />
                 {dialogContext.tabs.map((tab, index) => {
-                  return (tab.label && <div
-                    key={tab.label}
-                    onClick={() => dialogContext.handleTabClick(tab.path)}
-                    className="action-udf action-btn"
-                  >
-                    <span className={tab.className}></span>
-                    {tab.label}
-                  </div>)
-                }
-                 
-                )}
+                  return (
+                    tab.label && (
+                      <div
+                        key={tab.label}
+                        onClick={() => dialogContext.handleTabClick(tab.path)}
+                        className="action-udf action-btn"
+                      >
+                        <span className={tab.className}></span>
+                        {tab.label}
+                      </div>
+                    )
+                  );
+                })}
               </div>
               <div onClick={closeDialog} className="dialog-close-btn"></div>
             </div>
             <div className="dialog-content">
-              <div>Название</div>
-              <input
-                onChange={(event) => {
-                  if (task) {
-                    setTask({ ...task, title: event.target.value });
-                  }
-                }}
-                value={task?.title}
-              />
-              {metaDataContext?.metaData?.taskDataFields.map((df) => (
-                <div key={df.uid}>
-                  <div>{df.name}</div>
-                  <input
-                    id={df.uid}
-                    value={
-                      task.taskDataValues.length > 0
-                        ? task.taskDataValues.find(
-                            (tdv) => tdv.taskDataFieldUId == df.uid
-                          )?.value
-                        : ""
+              <div className="task-type-group">
+                <TextField
+                  onChange={(event) => {
+                    if (task) {
+                      setTask({ ...task, title: event.target.value });
                     }
-                    onChange={onValueChange}
-                  />
-                </div>
-              ))}
+                  }}
+                  value={task?.title}
+                  variant="standard"
+                  label="Название"
+                  size="small"
+                />
+                <Autocomplete
+                disablePortal
+                  options={metaDataContext?.metaData?.projects as Project[]}
+                  renderInput={(params) => <TextField   variant="standard"  {...params} label="Проект" />}
+                  getOptionLabel={(option) => option.fullName}
+                  renderOption={(props, option) => {
+                    return (
+                      <li {...props} key={option.uid}>
+                        {option.fullName}
+                      </li>
+                    )
+                  }}
+                />
+
+              </div>
+
+              <div className="task-udf-block" style={{gridTemplateColumns: `repeat(${Math.ceil(metaDataContext?.metaData?.taskDataFields.length as number / 3)}, 1fr)`}}>
+                {
+                metaDataContext?.metaData?.taskDataFields.map((df) => (
+                  <div key={df.uid}>
+                    <TextField
+                      id={df.uid}
+                      value={
+                        task.taskDataValues.length > 0
+                          ? task.taskDataValues.find(
+                              (tdv) => tdv.taskDataFieldUId == df.uid
+                            )?.value
+                          : ""
+                      }
+                      onChange={onValueChange}
+                      variant="standard"
+                      label={df.name}
+                      size="small"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         )}
