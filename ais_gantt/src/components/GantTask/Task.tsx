@@ -11,6 +11,7 @@ import interact from "interactjs";
 import { useContext, useEffect, useRef } from "react";
 import { DialogContext } from "../../contexts/Dialog.context";
 import { GroupContext } from "../../contexts/Tasks.context";
+import { ViewContext } from "../../contexts/View.context";
 
 type TaskProps = {
   task: Task;
@@ -19,8 +20,11 @@ type TaskProps = {
 };
 
 const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
+  const viewContext = useContext(ViewContext)
+  const startDate = viewContext?.view.startDate as number
+  const endDate = viewContext?.view.endDate as number
+  const cellWidth = viewContext?.view.cellWidth as number
   // const updateXarrow = useXarrow();
-  const testStart = 1693515600000;
   const dialogContext = useContext(DialogContext);
   const taskRef = useRef(null);
   const groupContext = useContext(GroupContext)
@@ -35,7 +39,9 @@ const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
   };
 
   const updateTask = (task: Task, groupUid: string) => {
-    const updatedGroups = groupContext?.groups
+    groupContext?.groups.forEach(group => {
+      group.items
+    })
   }
 
   useEffect(() => {
@@ -121,15 +127,15 @@ const GanttTask = ({ task, rowIndex, projectId }: TaskProps) => {
           calculateTaskWidth(
             task.startDate,
             task.endDate,
-            testStart,
-            1696107600000
+            startDate,
+            endDate
           ) *
-            57 +
+          cellWidth +
           "px",
         // borderRadius: "2px",
         zIndex: 1000,
         position: "absolute",
-        left: calculateTaskLeftOffset(task.startDate, testStart) * 57 + "px",
+        left: calculateTaskLeftOffset(task.startDate, startDate) * cellWidth + "px",
         top: rowIndex == 0 ? 8 : 0,
         display: "flex",
         fontStyle: "normal",

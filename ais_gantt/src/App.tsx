@@ -14,20 +14,21 @@ import MetadataContextProvider, {
 } from "./contexts/MetaData.context.tsx";
 import ChartActionBar from "./components/ChartActionBar/ChartActionBar.tsx";
 import Dialog from "./components/Dialog/Dialog.tsx";
+import ViewContextProvider from "./contexts/View.context.tsx";
 moment.locale("ru");
 
 function App() {
   return (
     <>
       {/* <ReactKeycloakProvider authClient={keycloak}> */}
+      <ViewContextProvider>
       <MetadataContextProvider>
         <DialogContextProvider>
           <GroupContextPovider>
             <Xwrapper>
               <ChartActionBar/>
               <CalendarHeader
-                startDate={1693515600000}
-                endDate={1696107600000}
+             
               />
               <Dialog />
               <AppRouter />
@@ -35,6 +36,7 @@ function App() {
           </GroupContextPovider>
         </DialogContextProvider>
       </MetadataContextProvider>
+      </ViewContextProvider>
       {/* </ReactKeycloakProvider> */}
     </>
   );

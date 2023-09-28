@@ -7,17 +7,22 @@ import { GroupContext } from "../contexts/Tasks.context";
 import { init } from "../api/task-queries";
 import { MetadataContext } from "../contexts/MetaData.context";
 import TasksRow from "../components/TasksRow/TasksRow";
+import { ViewContext } from "../contexts/View.context";
 
-const GantChart = (props: { startDate: number; endDate: number }) => {
+const GantChart = () => {
+
+  const viewContext = useContext(ViewContext)
+
   const groupContext = useContext(GroupContext);
   const metaDataContext = useContext(MetadataContext)
   const { innerWidth } = window;
   const differnceInDays = calculateDifferenceInDays(
-    props.startDate,
-    props.endDate
+    viewContext?.view?.startDate as number,
+    viewContext?.view?.endDate as number
   );
 
   useEffect(() => {
+    console.log("GANTTTT PAGE")
     init().then((data) => {
       console.log(data);
       const tree = buildTaskTree(data.tasks);

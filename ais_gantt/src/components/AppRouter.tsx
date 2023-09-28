@@ -13,7 +13,7 @@ const AppRouter = () => {
         <Route
           path="/"
           element={
-            <GantChart startDate={1693515600000} endDate={1696107600000} />
+            <GantChart/>
           }
         ></Route>
       </Routes>

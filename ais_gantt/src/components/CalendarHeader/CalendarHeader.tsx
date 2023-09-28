@@ -1,31 +1,58 @@
-import moment from "moment";
+import moment, { Moment } from "moment";
 import "./CalendarHeader.css";
 import { calculateDifferenceInDays } from "../../utils/helpers";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GroupContext } from "../../contexts/Tasks.context";
 import { useXarrow } from "react-xarrows";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {
 
+  LocalizationProvider,
 
-const CalendarHeader = (props: { startDate: number; endDate: number }) => {
+} from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import ButtonDatePicker from "../ToolbarDatePicker/ToolbarDatePicker";
+import { ViewContext } from "../../contexts/View.context";
+
+const CalendarHeader = () => {
+
+  const viewContext = useContext(ViewContext)
+  const startDate = viewContext?.view.startDate as number
+  const endDate = viewContext?.view.endDate as number
+
   const updateXarrow = useXarrow();
   const { innerWidth } = window;
-  const currDate = moment(props.startDate).subtract(1, "day");
-  const lastDate = moment(props.endDate);
+  const currDate = moment(startDate).subtract(1, "day")
+  const lastDate = moment(endDate).add(1, "day");
+
+console.log("CURRRRR", currDate)
+console.log("LAST", lastDate)
+
   const dates: moment.Moment[] = [];
   const differnceInDays = calculateDifferenceInDays(
-    props.startDate,
-    props.endDate
+    startDate,
+    endDate
   );
 
-  const groupContext = useContext(GroupContext)
-  const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
-    console.log(cellWidth);
-    
-  while (currDate.add(1, "days").diff(lastDate) < 0) {
+
+   const cellWidth = viewContext?.view.cellWidth as number
+
+
+  useEffect(() => {
+    const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
+    viewContext?.setView({...viewContext.view, cellWidth})
+    console.log("CELLL", cellWidth);
+  }, [viewContext?.view.startDate, viewContext?.view.endDate])
+
+  const groupContext = useContext(GroupContext);
+
+  while (currDate.add(1, "days").diff(lastDate) <= 0) {
     dates.push(currDate.clone());
   }
 
+  console.log("DATES", dates);
   
+
   const years = [...new Set(dates.map((date) => date.year()))].map((year) => ({
     year,
     count: dates.filter((date) => date.year() == year).length,
@@ -41,86 +68,38 @@ const CalendarHeader = (props: { startDate: number; endDate: number }) => {
   );
 
   const expandAllGroups = () => {
-    groupContext?.setGroups(groupContext?.groups.map(group => ({...group, isOpen: true})))
-    updateXarrow()
-  }
+    groupContext?.setGroups(
+      groupContext?.groups.map((group) => ({ ...group, isOpen: true }))
+    );
+    updateXarrow();
+  };
 
   const collapseAllGroups = () => {
-    groupContext?.setGroups(groupContext?.groups.map(group => ({...group, isOpen: false})))
-    updateXarrow()
-  }
-
+    groupContext?.setGroups(
+      groupContext?.groups.map((group) => ({ ...group, isOpen: false }))
+    );
+    updateXarrow();
+  };
 
   return (
     <div className="calendar-header">
       <div style={{ width: "201px", display: "flex", flexDirection: "column" }}>
         <span className="timing-toolbar">
-          <span className="timing-toolbar-item">
-            <div
-              style={{
-                lineHeight: "20px",
-                textTransform: "uppercase",
-                fontSize: "15px",
-                fontWeight: 600,
-              }}
-            >
-              {moment(props.startDate).format("MMMM").substring(0, 3)}
-            </div>
-            <div
-              style={{
-                lineHeight: "30px",
-                fontSize: "26px",
-                fontWeight: 600,
-              }}
-            >
-              {moment(props.startDate).date()}
-            </div>
-            <div
-              style={{
-                textTransform: "uppercase",
-                lineHeight: "23px",
-                fontSize: "13px",
-                fontWeight: 400,
-              }}
-            >
-              {moment(props.startDate).format("dddd").substring(0, 3)}
-            </div>
-          </span>
-          <span className="timing-toolbar-item">
-            <div
-              style={{
-                lineHeight: "20px",
-                textTransform: "uppercase",
-                fontSize: "15px",
-                fontWeight: 600,
-              }}
-            >
-              {moment(props.endDate).format("MMMM").substring(0, 3)}
-            </div>
-            <div
-              style={{
-                lineHeight: "30px",
-                fontSize: "26px",
-                fontWeight: 600,
-              }}
-            >
-              {moment(props.endDate).date()}
-            </div>
-            <div
-              style={{
-                textTransform: "uppercase",
-                lineHeight: "23px",
-                fontSize: "13px",
-                fontWeight: 400,
-              }}
-            >
-              {moment(props.endDate).format("dddd").substring(0, 3)}
-            </div>
-          </span>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <ButtonDatePicker
+              value={moment(startDate)}
+              onChange={(newValue) => viewContext?.setView({...viewContext.view, startDate: newValue?.valueOf() as number})}
+            />
+
+            <ButtonDatePicker
+              value={moment(endDate)}
+              onChange={(newValue) =>viewContext?.setView({...viewContext.view, endDate: newValue?.valueOf() as number})}
+            />
+          </LocalizationProvider>
         </span>
         <div className="buttonbar">
-          <input onClick={() => expandAllGroups()} type="button"/>
-          <input onClick={() => collapseAllGroups()} type="button"/>
+          <input onClick={() => expandAllGroups()} type="button" />
+          <input onClick={() => collapseAllGroups()} type="button" />
         </div>
       </div>
       <div className="chart-calendar">
@@ -226,3 +205,5 @@ const CalendarHeader = (props: { startDate: number; endDate: number }) => {
 };
 
 export default CalendarHeader;
+
+

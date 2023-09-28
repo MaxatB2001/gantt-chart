@@ -43,40 +43,49 @@ export function groupTasks(tasks: Task[]): Task[][] {
   return taskGroups;
 }
 
+//Метод определяющий количество дней между двумя датами включая начало и конец
 export const calculateDifferenceInDays = (
   startDate: number,
   endDate: number
 ) => {
   const start = moment(startDate);
   const end = moment(endDate);
-  return end.diff(start, "days");
+  console.log("DIFFERENT ", end.diff(start, "days"));
+  
+  return end.diff(start, "days") + 2;
 };
 
-export const calculateTaskWidth = (startDate: number, endDate: number, chartStartDate: number, chartEndDate: number) => {
+export const calculateTaskWidth = (startDate: number, endDate: number, chartStartDate: number, chartEndDate: number): number => {
 
+  
+  
   const taskStartDate = moment(startDate)
   const taskEndDate = moment(endDate)
-  const chartStart = moment(chartStartDate)
-  const chartEnd = moment(chartEndDate)
+  const chartStart = moment(chartStartDate).subtract(1, "day")
+  const chartEnd = moment(chartEndDate).add(1, "day");
 
   const isRange1BeyondRange2 = taskStartDate.isBefore(chartStart) || taskEndDate.isAfter(chartEnd);
 
   if (isRange1BeyondRange2) {
-    const overlapStart = moment.max(moment(startDate), moment(chartStartDate));
-    const overlapEnd = moment.min(moment(endDate), moment(chartEndDate));
+    const overlapStart = moment.max(taskStartDate ,chartStart);
+    const overlapEnd = moment.min(taskEndDate, chartEnd);
     const duration = moment.duration(overlapEnd.diff(overlapStart));
     const days = duration.as('days');
   
-    const overlappingDays = Math.max(0, days );
+    const overlappingDays = Math.ceil(Math.max(0, days ))
+    
     return overlappingDays
   }
   const start = moment(startDate);
   const end = moment(endDate);
+
+  console.log(end.diff(start, "days"));
+  
   return end.diff(start, "days");
 };
 
 export const calculateTaskLeftOffset = (taskStartDate: number, chartStartDate: number) => {
-  const start = moment( chartStartDate);
+  const start = moment( chartStartDate).subtract(1, "day");
   const end = moment(taskStartDate);
   const diff = end.diff(start, "days")
   // console.log(diff);
