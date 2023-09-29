@@ -25,8 +25,6 @@ const CalendarHeader = () => {
   const currDate = moment(startDate).subtract(1, "day")
   const lastDate = moment(endDate).add(1, "day");
 
-console.log("CURRRRR", currDate)
-console.log("LAST", lastDate)
 
   const dates: moment.Moment[] = [];
   const differnceInDays = calculateDifferenceInDays(
@@ -41,7 +39,6 @@ console.log("LAST", lastDate)
   useEffect(() => {
     const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
     viewContext?.setView({...viewContext.view, cellWidth})
-    console.log("CELLL", cellWidth);
   }, [viewContext?.view.startDate, viewContext?.view.endDate])
 
   const groupContext = useContext(GroupContext);
@@ -50,7 +47,6 @@ console.log("LAST", lastDate)
     dates.push(currDate.clone());
   }
 
-  console.log("DATES", dates);
   
 
   const years = [...new Set(dates.map((date) => date.year()))].map((year) => ({

@@ -7,9 +7,10 @@ import "./ResourceRow.css"
 type ResourceRowProps = {
   resource: Resource;
   projectId?: string
+  groupUid: string
 };
 
-const ResourceRow = ({ resource, projectId }: ResourceRowProps) => {
+const ResourceRow = ({ resource, projectId, groupUid }: ResourceRowProps) => {
   
   const grouppedTasks = groupTasks(resource.tasks);
 
@@ -33,7 +34,7 @@ const ResourceRow = ({ resource, projectId }: ResourceRowProps) => {
           </div>
           <div style={{position: "relative", flex: 1}}>
             {tasks.map((task) => (
-              <GanttTask key={task.uid} task={task} rowIndex={index} projectId={projectId}/>
+              <GanttTask key={task.uid} task={task} groupUid={groupUid} rowIndex={index} projectId={projectId}/>
             ))}
           </div>
         </div>

@@ -5,9 +5,10 @@ import "./TasksRow.css";
 
 type TaskRowProps = {
   task: Task;
+  groupUid: string
 };
 
-const TasksRow = ({ task }: TaskRowProps) => {
+const TasksRow = ({ task, groupUid}: TaskRowProps) => {
   const [isOpen, setIsOpen] = useState(task.isOpen);
   return (
     <>
@@ -27,11 +28,11 @@ const TasksRow = ({ task }: TaskRowProps) => {
           ></span>
         </div>
         <div className="task-container">
-          <GanttTask rowIndex={0} key={task.uid} task={task} />
+          <GanttTask rowIndex={0} groupUid={groupUid} key={task.uid} task={task} />
         </div>
       </div>
       {isOpen &&
-        task.children?.map((child) => <TasksRow key={child.uid} task={child} />)}
+        task.children?.map((child) => <TasksRow groupUid={groupUid} key={child.uid} task={child} />)}
     </>
   );
 };

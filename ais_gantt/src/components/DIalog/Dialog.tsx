@@ -34,7 +34,6 @@ const Dialog = () => {
 
   const saveTask = () => {
     updateTask(task).then((data) => {
-      console.log(data);
       closeDialog();
     });
   };
@@ -61,7 +60,6 @@ const Dialog = () => {
             metaDataContext?.metaData?.taskDataFields.length
         ) {
           metaDataContext?.metaData?.taskDataFields.forEach((tdf) => {
-            console.log(tdf, "TDF");
 
             if (
               task.taskDataValues.findIndex(
@@ -75,7 +73,6 @@ const Dialog = () => {
             }
           });
         }
-        console.log(task);
         setTask(task);
       });
     }

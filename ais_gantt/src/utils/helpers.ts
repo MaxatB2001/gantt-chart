@@ -50,7 +50,6 @@ export const calculateDifferenceInDays = (
 ) => {
   const start = moment(startDate);
   const end = moment(endDate);
-  console.log("DIFFERENT ", end.diff(start, "days"));
   
   return end.diff(start, "days") + 2;
 };
@@ -79,7 +78,6 @@ export const calculateTaskWidth = (startDate: number, endDate: number, chartStar
   const start = moment(startDate);
   const end = moment(endDate);
 
-  console.log(end.diff(start, "days"));
   
   return end.diff(start, "days");
 };
@@ -88,7 +86,6 @@ export const calculateTaskLeftOffset = (taskStartDate: number, chartStartDate: n
   const start = moment( chartStartDate).subtract(1, "day");
   const end = moment(taskStartDate);
   const diff = end.diff(start, "days")
-  // console.log(diff);
   if (diff < 0) return 0
   return end.diff(start, "days");
 }
@@ -162,7 +159,6 @@ export const buildTaskTree = (tasks: Task[]) => {
 export const getElementTopOffset = (
   event: React.MouseEvent<HTMLDivElement, MouseEvent>
 ) => {
-  console.log((event.target as HTMLElement).getBoundingClientRect(), "RECT");
 
   return (event.target as HTMLElement).getBoundingClientRect();
 };
@@ -176,3 +172,18 @@ export const chunkArray = (array: TaskDataField[], size: number) => {
     array.slice(index * size, index * size + size)
   );
 };
+
+
+export const updateTasksInTree = (task: Task, newTask: Task): Task => {
+
+  if (task.uid === newTask.uid) return newTask
+
+  if (task.children && task.children.length > 0) {
+    return {
+      ...task,
+      children: task.children.map(child => updateTasksInTree(child, newTask))
+    }
+  }
+
+  return task
+}

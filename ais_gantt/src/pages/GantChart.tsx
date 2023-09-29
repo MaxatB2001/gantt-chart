@@ -22,9 +22,9 @@ const GantChart = () => {
   );
 
   useEffect(() => {
-    console.log("GANTTTT PAGE")
     init().then((data) => {
       console.log(data);
+      
       const tree = buildTaskTree(data.tasks);
       const pwt = data.projects.map((project) => {
         const tasks = tree.filter((task) => task.projectUid === project.uid);
@@ -43,12 +43,11 @@ const GantChart = () => {
   }, []);
 
   const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
-  console.log(cellWidth);
 
   return (
     <div style={{ position: "relative" }}>
       {[...Array(differnceInDays)].map((x, i) => {
-        console.log(x)
+        // console.log(x)
         return (
           <span
             key={i}
@@ -70,8 +69,8 @@ const GantChart = () => {
           <GroupRow group={group} />
           {group.isOpen &&
             group.items.map(item => {
-              if ( isTask(item)) return <TasksRow key={item.uid} task={item}/>
-              return <ResourceRow key={item.id} resource={item} projectId={group.uid}/>
+              if ( isTask(item)) return <TasksRow groupUid={group.uid} key={item.uid} task={item}/>
+              return <ResourceRow key={item.id} groupUid={group.uid} resource={item} projectId={group.uid}/>
             }
                
             )
