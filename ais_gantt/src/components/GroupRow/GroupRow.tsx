@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import { GroupContext } from "../../contexts/Tasks.context";
-import { Project } from "../../models/Project";
 import "./GroupRow.css"
-import { useXarrow } from "react-xarrows";
+// import { useXarrow } from "react-xarrows";
 import { Group } from "../../models/Group";
 
 type GroupRowProps = {
@@ -11,7 +10,7 @@ type GroupRowProps = {
 
 const GroupRow = ({group}: GroupRowProps) => {
     const groupContext = useContext(GroupContext)
-    const updateXarrow = useXarrow();
+    // const updateXarrow = useXarrow();
     const collapseGroup = () => {
         const updated = groupContext?.groups.map(p => {
           if (p.uid == group.uid) {
@@ -22,7 +21,7 @@ const GroupRow = ({group}: GroupRowProps) => {
     
         groupContext?.setGroups(updated)
         setTimeout(() => {
-          updateXarrow()
+          // updateXarrow()
         })
       }
       

@@ -1,7 +1,6 @@
 import { Dispatch, PropsWithChildren, SetStateAction, createContext, useState } from "react";
 import DataFieldList from "../components/DataFieldList/DataFieldList";
 import AddDataField from "../components/AddDataField/AddDataField";
-import FIeldTypesList from "../components/FieldTypesList/FieldTypesList";
 import FieldTypesList from "../components/FieldTypesList/FieldTypesList";
 
 type DialogContextType = {

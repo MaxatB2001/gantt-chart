@@ -1,0 +1,9 @@
+.gantt-chart {
+    position: relative;
+    height: calc(100vh - 201px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+}

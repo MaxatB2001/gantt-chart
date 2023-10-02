@@ -7,6 +7,7 @@
 
 .gantt-taskbar {
     cursor: pointer;
+    overflow: hidden;
 }
 
 /* span {

@@ -1,10 +1,9 @@
-import moment, { Moment } from "moment";
+import moment from "moment";
 import "./CalendarHeader.css";
 import { calculateDifferenceInDays } from "../../utils/helpers";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { GroupContext } from "../../contexts/Tasks.context";
-import { useXarrow } from "react-xarrows";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { useXarrow } from "react-xarrows";
 import {
 
   LocalizationProvider,
@@ -20,7 +19,7 @@ const CalendarHeader = () => {
   const startDate = viewContext?.view.startDate as number
   const endDate = viewContext?.view.endDate as number
 
-  const updateXarrow = useXarrow();
+  // const updateXarrow = useXarrow();
   const { innerWidth } = window;
   const currDate = moment(startDate).subtract(1, "day")
   const lastDate = moment(endDate).add(1, "day");
@@ -37,7 +36,8 @@ const CalendarHeader = () => {
 
 
   useEffect(() => {
-    const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
+    console.log("INNER WIDTH INER INNER", innerWidth)
+    const cellWidth = Math.floor((innerWidth - 251) / differnceInDays);
     viewContext?.setView({...viewContext.view, cellWidth})
   }, [viewContext?.view.startDate, viewContext?.view.endDate])
 
@@ -67,14 +67,14 @@ const CalendarHeader = () => {
     groupContext?.setGroups(
       groupContext?.groups.map((group) => ({ ...group, isOpen: true }))
     );
-    updateXarrow();
+    // updateXarrow();
   };
 
   const collapseAllGroups = () => {
     groupContext?.setGroups(
       groupContext?.groups.map((group) => ({ ...group, isOpen: false }))
     );
-    updateXarrow();
+    // updateXarrow();
   };
 
   return (

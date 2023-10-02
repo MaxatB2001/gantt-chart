@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Project } from "../models/Project";
 import { Group } from "../models/Group";
 // import Xarrow from "react-xarrows";
 

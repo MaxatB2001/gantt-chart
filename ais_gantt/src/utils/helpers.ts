@@ -2,7 +2,6 @@ import { Resource } from "../models/Resource";
 import { Task } from "../models/Task";
 import moment from "moment";
 import { TaskDataField } from "../models/TaskDataFields";
-import { TaskDataValues } from "../models/TaskDataValues";
 
 export const mapTasksToUser = (tasks: Task[], resources: Resource[]) => {
   return resources.map((resource) => ({

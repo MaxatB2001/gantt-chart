@@ -1,7 +1,6 @@
 // import { useXarrow } from "react-xarrows";
 import { Task } from "../../models/Task";
 import {
-  calculateDifferenceInDays,
   calculateTaskLeftOffset,
   calculateTaskWidth,
   getElementTopOffset,
@@ -101,7 +100,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
         lockAxis: "x",
         listeners: {
           move: (event) => {
-            const { target, dx, dy } = event;
+            const { dx} = event;
             setY((prev) => prev + dx);
           },
 
@@ -154,42 +153,34 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
           interact.modifiers.restrictRect({
             restriction: "parent",
           }),
+          interact.modifiers.restrictSize({ min: {width: cellWidth, height: 0}  }),
         ],
         listeners: {
           move(event) {
             const { width, left } = event.rect;
             console.log(width, left);
             setWidth(width)
-            const newLeft = event.pageX - event.currentTarget.offsetLeft;
-            setY(newLeft)
-            // var target = event.target;
-            // var x = parseFloat(target.getAttribute("data-x")) || 0;
-            // var y = parseFloat(target.getAttribute("data-y")) || 0;
-
-            // // update the element's style
-            // target.style.width = event.rect.width + "px";
-            // target.style.height = event.rect.height + "px";
-
-            // // translate when resizing from top or left edges
-            // x += event.deltaRect.left;
-            // y += event.deltaRect.top;
-
-            // target.style.transform = "translate(" + x + "px," + y + "px)";
-
-            // target.setAttribute("data-x", x);
-            // target.setAttribute("data-y", y);
+            setY(left - 201 - 50)
           },
 
           end(event) {
-            var distanceX = event.dx;
+            // var distanceX = event.dx;
             let moveX = event.pageX - event.x0;
             console.log(moveX);
 
             if (event.deltaRect.left > 0) {
-              console.log("RIGHTO");
+              console.log("LEFTO RIGHTO");
+              const updatedTask = {
+                ...task,
+                startDate: moment(task.startDate)
+                  .add(Math.trunc(moveX / cellWidth), "day")
+                  .valueOf(),
+              };
+
+              updateTask(updatedTask, groupUid);
+
             }
             if (event.deltaRect.left < 0) {
-              console.log("LEFTO");
               const updatedTask = {
                 ...task,
                 startDate: moment(task.startDate)
@@ -200,10 +191,27 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
               updateTask(updatedTask, groupUid);
             }
             if (event.deltaRect.right > 0) {
-              console.log("RIGHTO");
+              console.log("RIGHTO RIGTO");
+              const updatedTask = {
+                ...task,
+                endDate: moment(task.endDate)
+                  .add(Math.trunc(moveX / cellWidth), "day")
+                  .valueOf(),
+              };
+
+              updateTask(updatedTask, groupUid);
             }
             if (event.deltaRect.right < 0) {
-              console.log("LEFTO");
+              console.log("LEFTO RIGHTO");
+
+              const updatedTask = {
+                ...task,
+                endDate: moment(task.endDate)
+                  .subtract(-Math.trunc(moveX / cellWidth), "day")
+                  .valueOf(),
+              };
+
+              updateTask(updatedTask, groupUid);
             }
 
             console.log("MOVE MOVE X", Math.trunc(moveX / cellWidth));
@@ -221,6 +229,8 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
       console.log("TASK DESTROY");
     };
   }, [cellWidth, task]);
+
+  // if (width == 0) return null
 
   return (
     <div
@@ -248,7 +258,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
               ) * cellWidth
             : width + "px",
         // borderRadius: "2px",
-        zIndex: 1000,
+        zIndex: 1,
         position: "absolute",
         left:
           y == 0

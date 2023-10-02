@@ -1,7 +1,7 @@
 .dialog {
     position: absolute;
-    width: 100%;
-    z-index: 9999999999;
+    width: calc(100% - 50px);
+    z-index: 2;
     background-color: white;
     min-height: 140px;
     border: 2px solid #aaa;
@@ -86,6 +86,6 @@
   
 }
 
-.dialog-block {
+/* .dialog-block {
 
-}
+} */

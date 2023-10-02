@@ -11,6 +11,8 @@ const AddDataField = () => {
   const submit = () => {
     if (dialogContext?.activeDataType) {
         addDataField({type: dialogContext?.activeDataType, name: dataFieldName}).then(data => {
+          console.log(data);
+          
             dialogContext.handleBackClick()
         })
     }

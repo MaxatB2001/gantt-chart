@@ -1,5 +1,6 @@
-import { Xwrapper } from "react-xarrows";
+// import { Xwrapper } from "react-xarrows";
 import "./App.css";
+import "./index.css";
 import CalendarHeader from "./components/CalendarHeader/CalendarHeader.tsx";
 import GroupContextPovider from "./contexts/Tasks.context.tsx";
 // import GantChart from "./pages/GantChart";
@@ -10,8 +11,7 @@ import AppRouter from "./components/AppRouter.tsx";
 // import { ReactKeycloakProvider } from "@react-keycloak/web";
 // import keycloak from "./Keycloak.ts";
 import DialogContextProvider from "./contexts/Dialog.context.tsx";
-import MetadataContextProvider, {
-} from "./contexts/MetaData.context.tsx";
+import MetadataContextProvider from "./contexts/MetaData.context.tsx";
 import ChartActionBar from "./components/ChartActionBar/ChartActionBar.tsx";
 import Dialog from "./components/Dialog/Dialog.tsx";
 import ViewContextProvider from "./contexts/View.context.tsx";
@@ -22,20 +22,20 @@ function App() {
     <>
       {/* <ReactKeycloakProvider authClient={keycloak}> */}
       <ViewContextProvider>
-      <MetadataContextProvider>
-        <DialogContextProvider>
-          <GroupContextPovider>
-            <Xwrapper>
-              <ChartActionBar/>
-              <CalendarHeader
-             
-              />
-              <Dialog />
-              <AppRouter />
-            </Xwrapper>
-          </GroupContextPovider>
-        </DialogContextProvider>
-      </MetadataContextProvider>
+        <MetadataContextProvider>
+          <DialogContextProvider>
+            <GroupContextPovider>
+              {/* <Xwrapper> */}
+              <ChartActionBar />
+              <div className="content">
+                <CalendarHeader />
+                <Dialog />
+                <AppRouter />
+              </div>
+              {/* </Xwrapper> */}
+            </GroupContextPovider>
+          </DialogContextProvider>
+        </MetadataContextProvider>
       </ViewContextProvider>
       {/* </ReactKeycloakProvider> */}
     </>

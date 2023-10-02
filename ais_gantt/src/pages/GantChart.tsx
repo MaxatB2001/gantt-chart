@@ -1,5 +1,5 @@
 // import moment from "moment";
-import { buildTaskTree, calculateDifferenceInDays, isTask, mapTasksToUser } from "../utils/helpers";
+import { buildTaskTree, calculateDifferenceInDays, isTask } from "../utils/helpers";
 import ResourceRow from "../components/ResourceRow/ResourceRow";
 import GroupRow from "../components/GroupRow/GroupRow";
 import { Fragment, useContext, useEffect } from "react";
@@ -8,6 +8,7 @@ import { init } from "../api/task-queries";
 import { MetadataContext } from "../contexts/MetaData.context";
 import TasksRow from "../components/TasksRow/TasksRow";
 import { ViewContext } from "../contexts/View.context";
+import "./GantChart.css"
 
 const GantChart = () => {
 
@@ -15,7 +16,6 @@ const GantChart = () => {
 
   const groupContext = useContext(GroupContext);
   const metaDataContext = useContext(MetadataContext)
-  const { innerWidth } = window;
   const differnceInDays = calculateDifferenceInDays(
     viewContext?.view?.startDate as number,
     viewContext?.view?.endDate as number
@@ -42,12 +42,13 @@ const GantChart = () => {
     });
   }, []);
 
-  const cellWidth = Math.floor((innerWidth - 201) / differnceInDays);
+  const cellWidth = viewContext?.view.cellWidth as number;
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="gantt-chart">
+      <div style={{position: "relative"}}>
       {[...Array(differnceInDays)].map((x, i) => {
-        // console.log(x)
+        console.log(x)
         return (
           <span
             key={i}
@@ -77,6 +78,7 @@ const GantChart = () => {
           }
         </Fragment>
       ))}
+      </div>
     </div>
   );
 };

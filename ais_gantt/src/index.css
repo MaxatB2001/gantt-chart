@@ -35,7 +35,7 @@ body {
 }
 
 .dialog-close-btn {
-  background-image: url("../../../public/close.svg");
+  background-image: url("./assets/close.svg");
   background-position: center;
   height: 40px;
   position: relative;
@@ -55,7 +55,7 @@ body {
 
 
 .dialog-close {
-  background-image: url("../../../public/back.svg");
+  background-image: url("./assets/back.svg");
   background-size: 20px 20px;
   background-repeat: no-repeat;
   background-position: center;
@@ -84,11 +84,11 @@ body {
 }
 
 .udf-list-icon {
-  background-image: url("../../../public/list.svg");
+  background-image: url("./assets/list.svg");
 }
 
 .udf-text-icon {
-  background-image: url("../../../public/text.svg");
+  background-image: url("./assets/text.svg");
 }
 
 .noselect {

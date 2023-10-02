@@ -34,6 +34,8 @@ const Dialog = () => {
 
   const saveTask = () => {
     updateTask(task).then((data) => {
+      console.log(data);
+      
       closeDialog();
     });
   };
@@ -95,7 +97,7 @@ const Dialog = () => {
                 ></div>
                 <div className="dialog-title">Задача</div>
                 <DialogButton onClick={saveTask} text="Сохранить" />
-                {dialogContext.tabs.map((tab, index) => {
+                {dialogContext.tabs.map((tab) => {
                   return (
                     tab.label && (
                       <div
@@ -126,10 +128,16 @@ const Dialog = () => {
                   size="small"
                 />
                 <Autocomplete
-                disablePortal
+                // disablePortal
+                  value={metaDataContext?.metaData?.projects.find(p => p.uid === task.projectUid)}
                   options={metaDataContext?.metaData?.projects as Project[]}
                   renderInput={(params) => <TextField   variant="standard"  {...params} label="Проект" />}
                   getOptionLabel={(option) => option.fullName}
+                  onChange={(event: any, newValue: Project | null) => {
+                    console.log(event);
+                    console.log(newValue);
+                    if (newValue) setTask({...task, projectUid: newValue.uid})
+                  }}
                   renderOption={(props, option) => {
                     return (
                       <li {...props} key={option.uid}>

@@ -21,13 +21,13 @@ services:
     depends_on:
       - postgres
 
-  # front:
-  #   build: ais_gantt/
-  #   labels:
-  #     SERVICE_CHECK_INTERVAL: 10s
-  #   ports:
-  #     - 48250:80
-  #   depends_on:
-  #     - back
+  front:
+    build: ais_gantt/
+    labels:
+      SERVICE_CHECK_INTERVAL: 10s
+    ports:
+      - 48250:80
+    depends_on:
+      - back
 volumes:
   postgres_microservice_back:
