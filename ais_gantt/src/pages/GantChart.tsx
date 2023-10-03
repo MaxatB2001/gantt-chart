@@ -1,5 +1,5 @@
 // import moment from "moment";
-import { buildTaskTree, calculateDifferenceInDays, isTask } from "../utils/helpers";
+import { buildTaskTree, calculateDifferenceInDays, isTask, mapTasksToUser } from "../utils/helpers";
 import ResourceRow from "../components/ResourceRow/ResourceRow";
 import GroupRow from "../components/GroupRow/GroupRow";
 import { Fragment, useContext, useEffect } from "react";
@@ -24,7 +24,7 @@ const GantChart = () => {
   useEffect(() => {
     init().then((data) => {
       console.log(data);
-      
+      // const viewContext = useContext(ViewContext)
       const tree = buildTaskTree(data.tasks);
       const pwt = data.projects.map((project) => {
         const tasks = tree.filter((task) => task.projectUid === project.uid);
@@ -65,7 +65,10 @@ const GantChart = () => {
         );
       })}
       {groupContext?.links}
-      {groupContext?.groups.map((group) => (
+      {/* {viewContext?.view.g == "NOR" && 
+        mapTasksToUser(tasks, resourses)
+      } */}
+      {viewContext?.view.g != "NOR" &&  groupContext?.groups.map((group) => (
         <Fragment key={group.uid}>
           <GroupRow group={group} />
           {group.isOpen &&
@@ -73,7 +76,6 @@ const GantChart = () => {
               if ( isTask(item)) return <TasksRow groupUid={group.uid} key={item.uid} task={item}/>
               return <ResourceRow key={item.id} groupUid={group.uid} resource={item} projectId={group.uid}/>
             }
-               
             )
           }
         </Fragment>

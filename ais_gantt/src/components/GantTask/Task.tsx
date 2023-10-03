@@ -102,6 +102,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
           move: (event) => {
             const { dx} = event;
             setY((prev) => prev + dx);
+            console.log("Y", dx)
           },
 
           end(event) {
@@ -109,9 +110,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
 
             // console.log(event.pageX)
             let moveX = event.pageX - event.x0;
-            console.log(moveX);
 
-            console.log("MOVE MOVE X", Math.trunc(moveX / cellWidth));
 
             if (moveX > 0) {
               const updatedTask = {
@@ -144,6 +143,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
         modifiers: [
           interact.modifiers.restrictRect({
             restriction: "parent",
+            // endOnly: true
           }),
         ],
       })

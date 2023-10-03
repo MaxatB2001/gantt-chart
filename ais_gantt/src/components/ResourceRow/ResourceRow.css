@@ -15,9 +15,29 @@
   position: relative;
   height: 100%;
   font-weight: 600;
+  display: flex;
 }
 
 .resource-row-text {
   padding: 0 5px;
   line-height: 23px;
+  flex-grow: 1;
+}
+
+.add-task {
+  height: 100%;
+    width: 24px;
+    border-radius: 50% 0 0 50%;
+    flex-shrink: 0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px;
+    flex-shrink: 0;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.add-task:hover {
+  background-color: #D9F0FF;
 }

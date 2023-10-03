@@ -7,37 +7,57 @@ import { getTask, updateTask } from "../../api/task-queries";
 import { Task } from "../../models/Task";
 import DialogButton from "../DialogButton/DialogButton";
 import TextField from "@mui/material/TextField";
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete from "@mui/material/Autocomplete";
 import { Project } from "../../models/Project";
+import moment from "moment";
+import { GroupContext } from "../../contexts/Tasks.context";
+import { isTask } from "../../utils/helpers";
+import { Group } from "../../models/Group";
+import { Resource } from "../../models/Resource";
 
 const Dialog = () => {
   const dialogContext = useContext(DialogContext);
   const metaDataContext = useContext(MetadataContext);
-  // const [taskDataValues, setTaskDataValues] = useState<TaskDataValues[]>([])
+  const groupContext = useContext(GroupContext);
   const [task, setTask] = useState<Task>({
     title: "",
-    uid: "",
+    // uid: "",
     projectUid: "",
     userUid: "",
-    startDate: 0,
-    endDate: 0,
+    startDate: moment().valueOf(),
+    endDate: moment().add(1, "day").valueOf(),
     parentId: "",
     taskDataValues: [],
   });
-
-  
-
 
   const closeDialog = () => {
     dialogContext?.setDialogState(null);
   };
 
   const saveTask = () => {
+    if (dialogContext?.dialogState?.userUid) {
+      task.userUid = dialogContext?.dialogState?.userUid;
+      addTask(task, task.userUid);
+    }
+
     updateTask(task).then((data) => {
       console.log(data);
-      
+
       closeDialog();
     });
+  };
+
+  const addTask = (task: Task, userUid: string) => {
+    const updatedGroups = groupContext?.groups.map((g) => {
+      g.items = g.items.map((gi) => {
+        if (!isTask(gi) && gi.id == userUid) {
+          gi.tasks.push(task);
+        }
+        return gi as Resource;
+      });
+      return g;
+    }) as Group[];
+    groupContext?.setGroups(updatedGroups);
   };
 
   const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +82,6 @@ const Dialog = () => {
             metaDataContext?.metaData?.taskDataFields.length
         ) {
           metaDataContext?.metaData?.taskDataFields.forEach((tdf) => {
-
             if (
               task.taskDataValues.findIndex(
                 (tdv) => tdv.taskDataFieldUId == tdf.uid
@@ -75,12 +94,44 @@ const Dialog = () => {
             }
           });
         }
+
         setTask(task);
       });
+    } else {
+      if (
+        metaDataContext?.metaData &&
+        task.taskDataValues.length <
+          metaDataContext?.metaData?.taskDataFields.length
+      ) {
+        metaDataContext?.metaData?.taskDataFields.forEach((tdf) => {
+          if (
+            task.taskDataValues.findIndex(
+              (tdv) => tdv.taskDataFieldUId == tdf.uid
+            ) < 0
+          ) {
+            task.taskDataValues.push({
+              taskDataFieldUId: tdf.uid,
+              value: "",
+            });
+          }
+        });
+        setTask(task);
+      }
     }
-  }, [dialogContext?.dialogState]);
 
-  //  let currentTab = tabs[activeTab];
+    return () => {
+      setTask({
+        title: "",
+        // uid: "",
+        projectUid: "",
+        userUid: "",
+        startDate: moment().valueOf(),
+        endDate: moment().add(1, "day").valueOf(),
+        parentId: "",
+        taskDataValues: [],
+      });
+    };
+  }, [dialogContext?.dialogState]);
 
   if (!dialogContext?.dialogState) {
     return null;
@@ -128,30 +179,42 @@ const Dialog = () => {
                   size="small"
                 />
                 <Autocomplete
-                // disablePortal
-                  value={metaDataContext?.metaData?.projects.find(p => p.uid === task.projectUid)}
+                  // disablePortal
+                  value={
+                    metaDataContext?.metaData?.projects.find(
+                      (p) => p.uid == task.projectUid
+                    ) || null
+                  }
                   options={metaDataContext?.metaData?.projects as Project[]}
-                  renderInput={(params) => <TextField   variant="standard"  {...params} label="Проект" />}
+                  renderInput={(params) => (
+                    <TextField variant="standard" {...params} label="Проект" />
+                  )}
                   getOptionLabel={(option) => option.fullName}
                   onChange={(event: any, newValue: Project | null) => {
                     console.log(event);
-                    console.log(newValue);
-                    if (newValue) setTask({...task, projectUid: newValue.uid})
+                    if (newValue)
+                      setTask({ ...task, projectUid: newValue.uid });
                   }}
                   renderOption={(props, option) => {
                     return (
                       <li {...props} key={option.uid}>
                         {option.fullName}
                       </li>
-                    )
+                    );
                   }}
                 />
-
               </div>
 
-              <div className="task-udf-block" style={{gridTemplateColumns: `repeat(${Math.ceil(metaDataContext?.metaData?.taskDataFields.length as number / 3)}, 1fr)`}}>
-                {
-                metaDataContext?.metaData?.taskDataFields.map((df) => (
+              <div
+                className="task-udf-block"
+                style={{
+                  gridTemplateColumns: `repeat(${Math.ceil(
+                    (metaDataContext?.metaData?.taskDataFields
+                      .length as number) / 3
+                  )}, 1fr)`,
+                }}
+              >
+                {metaDataContext?.metaData?.taskDataFields.map((df) => (
                   <div key={df.uid}>
                     <TextField
                       id={df.uid}

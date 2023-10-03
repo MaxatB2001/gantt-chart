@@ -4,8 +4,8 @@ import AddDataField from "../components/AddDataField/AddDataField";
 import FieldTypesList from "../components/FieldTypesList/FieldTypesList";
 
 type DialogContextType = {
-  dialogState: { top: number; taskUid: string } | null;
-  setDialogState: Dispatch<SetStateAction<{ top: number; taskUid: string } | null>>;
+  dialogState: { top: number; taskUid?: string, tabPath?: string, userUid?: string } | null;
+  setDialogState: Dispatch<SetStateAction<{ top: number; taskUid?: string, tabPath?: string, userUid?: string } | null>>;
   handleTabClick: (path: string) => void,
   handleBackClick: () => void,
   tabs: Tab[],
@@ -40,7 +40,7 @@ const DialogContextProvider = ({ children }: PropsWithChildren) => {
     {
       element: <AddDataField/>,
       path: "add-data-field"
-    }
+    },
   ]
   const [activeTab, setActiveTab] = useState<string>("")
   const [history, setHistory] = useState<any>([]);
@@ -65,7 +65,9 @@ const DialogContextProvider = ({ children }: PropsWithChildren) => {
 
     const [dialogState, setDialogState] = useState<{
         top: number;
-        taskUid: string;
+        taskUid?: string;
+        tabPath?: string
+        userUid?: string
       } | null>(null);
 
     return (

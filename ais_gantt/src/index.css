@@ -91,7 +91,11 @@ body {
   background-image: url("./assets/text.svg");
 }
 
-.noselect {
+.add-icon {
+  background-image: url("./assets/add.svg");
+}
+
+* {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */

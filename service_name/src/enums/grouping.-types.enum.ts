@@ -1,5 +1,7 @@
 export enum GroupingTypes {
-    "TPROJECT" = "TPG",
-    "RPROJECT" = "RPG",
-    "DATAFIELD" = "DFG",
+  'TPROJECT' = 'TPG',
+  'RPROJECT' = 'RPG',
+  'DATAFIELD' = 'DFG',
+  'NOTASK' = 'NOT',
+  'NORESOURCE' = 'NOR',
 }

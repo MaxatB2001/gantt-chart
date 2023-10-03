@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
+import { randomUUID } from 'crypto';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { DataFieldValueDto } from 'src/DTO/data-field-value.dto';
 import { DataFieldDto } from 'src/DTO/data-field.dto';
@@ -39,6 +40,11 @@ const resourses = [
   {
     id: '2bd34e3e-23da-4392-9dz2-f3c3zz32d2v6',
     name: 'Веня',
+    tasks: [],
+  },
+  {
+    id: '2bd34e3e-23da-4392-9dz2-f3c3zd32d2v6',
+    name: 'Юзерный',
     tasks: [],
   },
 ];
@@ -88,6 +94,16 @@ export class TaskManagementService {
     const projects = await lastValueFrom(
       this.projectListClient.send('get-projects', {}),
     );
+
+    if (filter.g == GroupingTypes.NORESOURCE) {
+      const usersWithTasks = mapTasksToUser(tasks, resourses);
+      return [{
+        uid: randomUUID(),
+        title: "test",
+        isOpen: true,
+        items: usersWithTasks,
+      }]
+    }
 
     if (filter.g == GroupingTypes.TPROJECT) {
       const tree = buildTaskTree(tasks);

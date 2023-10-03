@@ -1,7 +1,7 @@
 import { TaskDataValues } from "./TaskDataValues";
 
 export interface Task {
-    uid: string;
+    uid?: string;
     title: string;
     startDate: number;
     endDate: number;

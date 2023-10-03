@@ -101,7 +101,7 @@ export const buildTaskTree = (tasks: Task[]) => {
       isOpen: true,
     };
 
-    tree.set(uid, node);
+    tree.set(uid as string, node);
 
     if (parentId) {
       const parent = tree.get(parentId);
@@ -115,7 +115,7 @@ export const buildTaskTree = (tasks: Task[]) => {
         } else {
           parent.children = [tempNode];
         }
-        tree.set(tempNode.uid, tempNode);
+        tree.set(tempNode.uid as string, tempNode);
       }
     }
   });

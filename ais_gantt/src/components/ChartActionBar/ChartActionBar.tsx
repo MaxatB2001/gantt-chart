@@ -3,12 +3,14 @@ import "./ChartActionBar.css";
 import DialogButton from "../DialogButton/DialogButton";
 import { MetadataContext } from "../../contexts/MetaData.context";
 import { applyFilter } from "../../api/task-queries";
-import { Filter } from "../../models/Filter";
+// import { Filter } from "../../models/Filter";
 import { GroupContext } from "../../contexts/Tasks.context";
+import { ViewContext } from "../../contexts/View.context";
 
 const ChartActionBar = () => {
   const metaDataContext = useContext(MetadataContext);
   const groupContext = useContext(GroupContext);
+  const viewContext = useContext(ViewContext)
 
   const options = [
     {
@@ -18,7 +20,7 @@ const ChartActionBar = () => {
   ];
 
   const apply = () => {
-    applyFilter(filter).then((data) => {
+    applyFilter(viewContext?.view).then((data) => {
       console.log(data);
       groupContext?.setGroups(data);
       setActive(null);
@@ -26,7 +28,7 @@ const ChartActionBar = () => {
   };
 
   const [active, setActive] = useState<null | number>(null);
-  const [filter, setFilter] = useState<Filter>({ g: "", udfUid: null });
+  // const [filter, setFilter] = useState<Filter>({ g: "", udfUid: null });
 
   return (
     <>
@@ -49,15 +51,27 @@ const ChartActionBar = () => {
               <div className="toolbar-field-data">
                 <div
                   onClick={() =>
-                    setFilter({ ...filter, g: "TPG", udfUid: null })
+                    viewContext?.setView({ ...viewContext.view, g: "TPG", udfUid: null })
                   }
                   className={
-                    filter.g == "TPG"
+                    viewContext?.view.g == "TPG"
                       ? "selected toolbar-list-button"
                       : "toolbar-list-button"
                   }
                 >
                   <span>Проекты</span>
+                </div>
+                <div
+                  onClick={() =>
+                    viewContext?.setView({ ...viewContext.view, g: "NOR", udfUid: null })
+                  }
+                  className={
+                    viewContext?.view.g == "NOR"
+                      ? "selected toolbar-list-button"
+                      : "toolbar-list-button"
+                  }
+                >
+                  <span>Без группировки</span>
                 </div>
               </div>
             </div>
@@ -67,11 +81,11 @@ const ChartActionBar = () => {
                 {metaDataContext?.metaData?.taskDataFields.map((tdf) => (
                   <div
                     onClick={() =>
-                      setFilter({ ...filter, g: "DFG", udfUid: tdf.uid })
+                      viewContext?.setView({ ...viewContext.view, g: "DFG", udfUid: tdf.uid })
                     }
                     key={tdf.uid}
                     className={
-                      filter.udfUid == tdf.uid && filter.g == "DFG"
+                      viewContext?.view.udfUid == tdf.uid && viewContext.view.g == "DFG"
                         ? "selected toolbar-list-button"
                         : "toolbar-list-button"
                     }
@@ -88,10 +102,10 @@ const ChartActionBar = () => {
               <div className="toolbar-field-data">
                 <div
                   onClick={() =>
-                    setFilter({ ...filter, g: "RPG", udfUid: null })
+                    viewContext?.setView({ ...viewContext.view, g: "RPG", udfUid: null })
                   }
                   className={
-                    filter.g == "RPG"
+                    viewContext?.view.g == "RPG"
                       ? "selected toolbar-list-button"
                       : "toolbar-list-button"
                   }
