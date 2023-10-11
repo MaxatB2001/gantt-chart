@@ -28,6 +28,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
             durable: false
           },
         }
+      },
+      {
+        name: "STAFFING_TABLE",
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ_ADDRESS],
+          queue: "counterparties-staffing",
+          queueOptions: {
+            durable: false
+          },
+        }
       }
     ])
   ]

@@ -41,9 +41,5 @@ import { TaskDataField } from './schemas/TaskDataField.schema';
   controllers: [AppController],
 })
 export class AppModule {
-  constructor() {
-    console.log(process.env.POSTGRESQL_USER);
-    
-    console.log(process.env.POSTGRESQL_PASS)
-  }
+  constructor() {}
 }

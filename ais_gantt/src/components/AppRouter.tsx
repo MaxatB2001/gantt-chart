@@ -1,4 +1,4 @@
-import {  HashRouter, Route, Routes } from "react-router-dom";
+import {  BrowserRouter, Route, Routes } from "react-router-dom";
 // import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import GantChart from "../pages/GantChart";
 import Test from "../pages/Test";
@@ -8,12 +8,12 @@ import Test from "../pages/Test";
 
 const AppRouter = () => {
   return (
-    <HashRouter>
+    <BrowserRouter basename="test">
       <Routes>
         <Route path="/" element={<GantChart />}></Route>
         <Route path="/t" element={<Test />}></Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 

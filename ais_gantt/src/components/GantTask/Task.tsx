@@ -79,7 +79,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
         }) as Group[];
       }
     }
-
+    
     //Обновление состояния групп
     groupContext?.setGroups(updatedGroups as Group[]);
   };
@@ -169,7 +169,7 @@ const GanttTask = ({ task, rowIndex, projectId, groupUid }: TaskProps) => {
             console.log(moveX);
 
             if (event.deltaRect.left > 0) {
-              console.log("LEFTO RIGHTO");
+              console.log("LEFTO RIGHTO"); 
               const updatedTask = {
                 ...task,
                 startDate: moment(task.startDate)

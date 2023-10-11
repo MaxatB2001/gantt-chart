@@ -62,6 +62,8 @@ export const calculateTaskWidth = (startDate: number, endDate: number, chartStar
   const chartStart = moment(chartStartDate).subtract(1, "day")
   const chartEnd = moment(chartEndDate).add(1, "day");
 
+  
+
   const isRange1BeyondRange2 = taskStartDate.isBefore(chartStart) || taskEndDate.isAfter(chartEnd);
 
   if (isRange1BeyondRange2) {
