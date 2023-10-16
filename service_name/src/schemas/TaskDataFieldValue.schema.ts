@@ -14,4 +14,7 @@ export class TaskDataFieldValue {
 
   @ManyToOne(type => TaskSchema, task => task.taskDataValues, {onDelete: "CASCADE"})
   task: TaskSchema
+
+  @Column({nullable: true})
+  listId: string
 }

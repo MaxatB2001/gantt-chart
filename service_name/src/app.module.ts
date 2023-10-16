@@ -10,6 +10,7 @@ import { TaskSchema } from './schemas/Task.schema';
 import { ViewSchema } from './schemas/View.schema';
 import { TaskDataFieldValue } from './schemas/TaskDataFieldValue.schema';
 import { TaskDataField } from './schemas/TaskDataField.schema';
+import { TaskDataFieldListItem } from './schemas/TaskDataFieldListItem';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { TaskDataField } from './schemas/TaskDataField.schema';
       username: process.env.POSTGRESQL_USER,
       password: process.env.POSTGRESQL_PASS,
       database: process.env.POSTGRESQL_DB,
-      entities: [TaskSchema, ViewSchema, TaskDataField, TaskDataFieldValue],
+      entities: [TaskSchema, ViewSchema, TaskDataField, TaskDataFieldValue, TaskDataFieldListItem],
       synchronize: true,
       //autoLoadEntities: true
     }

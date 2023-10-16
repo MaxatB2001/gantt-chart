@@ -70,12 +70,16 @@ export class TaskManagementService {
       order: {
         endDate: "DESC"
       }
-      // where: {
-      //   taskDataValues: {
-      //     value: ""
-      //   }
-      // }
     });
+
+    const tdf = await this.taskDataFieldRepo.findOne({where: {
+      uid: "214e5593-5ff7-48e4-bb1a-c427a6d0f44c"
+    }})
+
+    tdf.list.forEach(l => {
+    
+    })
+
     const projects = await lastValueFrom(
       this.projectListClient.send('get-projects', {test: {test: "OR"}}),
     );

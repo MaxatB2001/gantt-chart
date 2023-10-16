@@ -8,12 +8,13 @@ import { ViewSchema } from 'src/schemas/View.schema';
 import { TaskDataField } from 'src/schemas/TaskDataField.schema';
 import { TaskDataFieldValue } from 'src/schemas/TaskDataFieldValue.schema';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TaskDataFieldListItem } from 'src/schemas/TaskDataFieldListItem';
 
 @Module({
   controllers: [TaskManagementController],
   providers: [TaskManagementService],
   imports: [
-    TypeOrmModule.forFeature([TaskSchema, ViewSchema, TaskDataField, TaskDataFieldValue]),
+    TypeOrmModule.forFeature([TaskSchema, ViewSchema, TaskDataField, TaskDataFieldValue, TaskDataFieldListItem]),
     ConfigModule.forRoot({
         envFilePath: '.development.env'
     }),

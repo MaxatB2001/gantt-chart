@@ -32,4 +32,5 @@ export class TaskSchema {
   children?: TaskSchema[]
   isOpen?: boolean
   level?: number
+  color?: string
 }

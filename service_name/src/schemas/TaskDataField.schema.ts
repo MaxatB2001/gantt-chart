@@ -1,5 +1,6 @@
 import { DataField } from "src/enums/data-field.enum";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TaskDataFieldListItem } from "./TaskDataFieldListItem";
 
 @Entity()
 export class TaskDataField {
@@ -12,11 +13,6 @@ export class TaskDataField {
     @Column({enum: DataField})
     type: DataField
 
-    @Column({
-        type: 'jsonb',
-        array: false,
-        default: () => "'[]'",
-        nullable: false,
-    })
-    list: Array<string>
+    @OneToMany(() => TaskDataFieldListItem, (listItem) => listItem.tdf, {cascade: true, eager: true})
+    list: TaskDataFieldListItem[]
 }
