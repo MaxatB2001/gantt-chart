@@ -72,21 +72,13 @@ export class TaskManagementService {
       }
     });
 
-    const tdf = await this.taskDataFieldRepo.findOne({where: {
-      uid: "214e5593-5ff7-48e4-bb1a-c427a6d0f44c"
-    }})
-
-    tdf.list.forEach(l => {
-    
-    })
-
     const projects = await lastValueFrom(
       this.projectListClient.send('get-projects', {test: {test: "OR"}}),
     );
     
     const users = await lastValueFrom(this.staffingTableClient.send("get-persons", {}))
-    console.log(users);
-    
+    // console.log(users);
+    await this.colorTasks(tasks, "8cf6f376-9a0a-46d4-aecd-fc6411ff290f")
 
     return {
       projects,
@@ -94,6 +86,25 @@ export class TaskManagementService {
       tasks,
       resourses: users,
     };
+  }
+
+  async colorTasks(tasks: TaskSchema[], fieldUid: string) {
+    const tdf = await this.taskDataFieldRepo.findOne({where: {
+      uid: fieldUid
+    }})
+
+    const mappedColors = tdf.list.reduce((acc, cur) => {
+      acc[cur.uid] = cur.color
+      return acc
+    }, {})
+    console.log("MAPPED COLORS", mappedColors)
+
+    tasks.forEach(task => {
+      const fTdv = task.taskDataValues.find(tdv => tdv.taskDataFieldUId == tdf.uid)
+      if (fTdv) {
+        task.color = mappedColors[fTdv.listId]
+      }
+    })
   }
 
   async applyFilter(filter: Filter) {
@@ -110,7 +121,8 @@ export class TaskManagementService {
   }
 
   async getTask(uid: string) {
-    return this.taskRepo.findOne({ where: { uid } });
+    const task = await this.taskRepo.findOne({ where: { uid } });
+    return task
   }
 
   async createTask(taskDto: TaskDto) {

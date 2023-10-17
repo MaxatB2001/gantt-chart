@@ -32,5 +32,5 @@ export class TaskSchema {
   children?: TaskSchema[]
   isOpen?: boolean
   level?: number
-  color?: string
+  color = "#50c7d6"
 }
