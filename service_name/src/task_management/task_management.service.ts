@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
+import { title } from 'process';
 import { firstValueFrom, last, lastValueFrom } from 'rxjs';
 import { DataFieldValueDto } from 'src/DTO/data-field-value.dto';
 import { DataFieldDto } from 'src/DTO/data-field.dto';
@@ -14,7 +15,7 @@ import { TaskSchema } from 'src/schemas/Task.schema';
 import { TaskDataField } from 'src/schemas/TaskDataField.schema';
 import { TaskDataFieldValue } from 'src/schemas/TaskDataFieldValue.schema';
 import { ViewSchema } from 'src/schemas/View.schema';
-import { Repository } from 'typeorm';
+import { And, Equal, In, Not, Repository } from 'typeorm';
 
 const resourses = [
   {
@@ -65,20 +66,39 @@ export class TaskManagementService {
   ) {}
 
   async init() {
+    const tasksFilter = [{ type: 'Task', udfUid: 0, v: 'OR' }];
+
+    let tasksWhere = [
+      { title: 'ee', qq: 'qeww' },
+      { title: 'new', qq: 'qeww' },
+    ];
+
     const TaskDataFields = await this.taskDataFieldRepo.find();
     const tasks = await this.taskRepo.find({
       order: {
-        endDate: "DESC"
-      }
+        endDate: 'ASC',
+      },
+      where: {
+        title: Not(In(['gg', 'Таска 3'])),
+        // taskDataValues: And(
+        //   {
+        //     listId: 'a427211d-89f6-4c25-8358-de5412c07eb6',
+        //   },
+        //   { value: 'test' },
+        // ),
+      },
     });
 
     const projects = await lastValueFrom(
-      this.projectListClient.send('get-projects', {test: {test: "OR"}}),
+      this.projectListClient.send('get-projects', { test: { test: 'OR' } }),
     );
-    
-    const users = await lastValueFrom(this.staffingTableClient.send("get-persons", {}))
+
+    const users = await lastValueFrom(
+      this.staffingTableClient.send('get-persons', {}),
+    );
+
     // console.log(users);
-    await this.colorTasks(tasks, "8cf6f376-9a0a-46d4-aecd-fc6411ff290f")
+    await this.colorTasks(tasks, '8cf6f376-9a0a-46d4-aecd-fc6411ff290f');
 
     return {
       projects,
@@ -89,40 +109,41 @@ export class TaskManagementService {
   }
 
   async colorTasks(tasks: TaskSchema[], fieldUid: string) {
-    const tdf = await this.taskDataFieldRepo.findOne({where: {
-      uid: fieldUid
-    }})
+    const tdf = await this.taskDataFieldRepo.findOne({
+      where: {
+        uid: fieldUid,
+      },
+    });
 
     const mappedColors = tdf.list.reduce((acc, cur) => {
-      acc[cur.uid] = cur.color
-      return acc
-    }, {})
-    console.log("MAPPED COLORS", mappedColors)
+      acc[cur.uid] = cur.color;
+      return acc;
+    }, {});
+    console.log('MAPPED COLORS', mappedColors);
 
-    tasks.forEach(task => {
-      const fTdv = task.taskDataValues.find(tdv => tdv.taskDataFieldUId == tdf.uid)
+    tasks.forEach((task) => {
+      const fTdv = task.taskDataValues.find(
+        (tdv) => tdv.taskDataFieldUId == tdf.uid,
+      );
       if (fTdv) {
-        task.color = mappedColors[fTdv.listId]
+        task.color = mappedColors[fTdv.listId];
       }
-    })
+    });
   }
 
   async applyFilter(filter: Filter) {
     console.log(filter);
-    
 
     const tasks = await this.taskRepo.find();
 
     const projects = await lastValueFrom(
-      this.projectListClient.send('get-projects', {test: {test: "OR"}}),
+      this.projectListClient.send('get-projects', { test: { test: 'OR' } }),
     );
-
-    
   }
 
   async getTask(uid: string) {
     const task = await this.taskRepo.findOne({ where: { uid } });
-    return task
+    return task;
   }
 
   async createTask(taskDto: TaskDto) {
@@ -148,7 +169,7 @@ export class TaskManagementService {
   }
 
   async deleteDataField(uid: string) {
-    return await this.taskDataFieldRepo.delete(uid)
+    return await this.taskDataFieldRepo.delete(uid);
   }
 
   async createTaskDataFieldValue(dataFieldValue: DataFieldValueDto) {
@@ -169,5 +190,4 @@ export class TaskManagementService {
   async updateTask(task: TaskSchema) {
     return await this.taskRepo.save(task);
   }
-
 }
