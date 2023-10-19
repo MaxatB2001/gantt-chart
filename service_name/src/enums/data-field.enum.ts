@@ -1,5 +1,5 @@
 export enum DataField {
-    "NUMBER" = "число",
-    "TEXT" = "Текст",
-    "LIST" = "Список"
+    "NUMBER" = "NUMBER",
+    "TEXT" = "TEXT",
+    "LIST" = "LIST"
 }

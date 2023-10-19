@@ -32,6 +32,16 @@ export class TaskManagementController {
     return this.taskManagementService.applyFilter(filter)
   }
 
+  @Get("/fields-labels")
+  getFieldsLabels() {
+    return this.taskManagementService.getAllProperties();
+  }
+
+  @Get("/fields-labels/value/:uid")
+  getValuesOfField(@Param("uid") uid: string) {
+    return this.taskManagementService.getValuesOfField(uid)
+  }
+
   @Get("/task/:uid")
   getTask(@Param("uid") uid: string) {
     return this.taskManagementService.getTask(uid)

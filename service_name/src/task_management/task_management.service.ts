@@ -8,11 +8,13 @@ import { DataFieldValueDto } from 'src/DTO/data-field-value.dto';
 import { DataFieldDto } from 'src/DTO/data-field.dto';
 import { TaskDto } from 'src/DTO/task.dto';
 import { ViewDto } from 'src/DTO/view.dto';
+import { DataField } from 'src/enums/data-field.enum';
 import { GroupingTypes } from 'src/enums/grouping.-types.enum';
 import { buildTaskTree, groupBy, mapTasksToUser } from 'src/helpers/utils';
 import { Filter } from 'src/interfaces/Filter';
 import { TaskSchema } from 'src/schemas/Task.schema';
 import { TaskDataField } from 'src/schemas/TaskDataField.schema';
+import { TaskDataFieldListItem } from 'src/schemas/TaskDataFieldListItem';
 import { TaskDataFieldValue } from 'src/schemas/TaskDataFieldValue.schema';
 import { ViewSchema } from 'src/schemas/View.schema';
 import { And, Equal, In, Not, Repository } from 'typeorm';
@@ -61,33 +63,81 @@ export class TaskManagementService {
     private taskDataFieldRepo: Repository<TaskDataField>,
     @InjectRepository(TaskDataFieldValue)
     private taskDataFieldValueRepo: Repository<TaskDataFieldValue>,
+    @InjectRepository(TaskDataFieldListItem)
+    private taskDataFieldListRepo: Repository<TaskDataFieldListItem>,
     @Inject('PROJECT_LIST') private readonly projectListClient: ClientProxy,
     @Inject('STAFFING_TABLE') private readonly staffingTableClient: ClientProxy,
   ) {}
 
   async init() {
-    const tasksFilter = [{ type: 'Task', udfUid: 0, v: 'OR' }];
+  const tasksFilter = {
+    operator: "AND",
+    conditions: [
+      {
+        operator: "IS",
+        dataFieldUid: "8cf6f376-9a0a-46d4-aecd-fc6411ff290f",
+        fieldType: DataField.LIST,
+        values: [
+          "93159ce5-c98d-4687-8b2c-a23b6bd938b6"  
+        ]
+      },
+      // {
+      //   operator: "IS",
+      //   dataFieldUid: "2bbbaf6a-5039-4c9c-a4bb-63000dc69430",
+      //   fieldType: DataField.TEXT,
+      //   values: [
+      //     "text",
+      //     "qrw"
+      //   ]
+      // },
+    ]
+  }
 
-    let tasksWhere = [
-      { title: 'ee', qq: 'qeww' },
-      { title: 'new', qq: 'qeww' },
-    ];
 
+    let tasksWhere = [];
+    if (tasksFilter.operator == "OR") {
+
+    } else {
+      const where = {taskDataValues: {}}
+      tasksFilter.conditions.forEach(con => {
+        if (con.fieldType == DataField.LIST) {
+          where["taskDataValues"]["listId"]  =  con.operator == "IS" ? In(con.values) : Not(In(con.values))
+          
+        }
+        if (con.fieldType == DataField.TEXT) {
+          where["taskDataValues"]["value"] = con.operator == "IS" ? In(con.values) : Not(In(con.values))
+        }
+      })
+      tasksWhere.push(where)
+    }
+         // title: Not(In(['gg', 'Таска 3'])),
+          // taskDataValues: And(
+          //   {
+          //     listId: 'a427211d-89f6-4c25-8358-de5412c07eb6',
+          //   },
+          //   { value: 'test' },
+          // ),
     const TaskDataFields = await this.taskDataFieldRepo.find();
     const tasks = await this.taskRepo.find({
       order: {
         endDate: 'ASC',
       },
-      where: {
-        title: Not(In(['gg', 'Таска 3'])),
-        // taskDataValues: And(
+      // where: {
+      //   taskDataValues: {
+      //     value: Not(In([""]))
+      //   }
+        // taskDataValues: [
         //   {
-        //     listId: 'a427211d-89f6-4c25-8358-de5412c07eb6',
+        //     value: In(["wqdw"])
         //   },
-        //   { value: 'test' },
-        // ),
-      },
-    });
+        //   {
+        //     value: In(["test"])
+        //   }
+        // ]
+    //   }
+      where: tasksWhere
+    }
+    );
 
     const projects = await lastValueFrom(
       this.projectListClient.send('get-projects', { test: { test: 'OR' } }),
@@ -129,6 +179,27 @@ export class TaskManagementService {
         task.color = mappedColors[fTdv.listId];
       }
     });
+  }
+
+  async getAllProperties() {
+    // console.log(
+    //   this.taskRepo.metadata.columns.forEach((c) => {
+    //     console.log(c.propertyName);
+    //     console.log(c.type.valueOf());
+    //   }),
+    // );
+
+    return await this.taskDataFieldRepo.find();
+  }
+
+  async getValuesOfField(uid: string) {
+    // , select: {taskDataValues: {value: true}}
+    const taskDataField = await this.taskDataFieldRepo.findOne({where: {uid}})
+    console.log(taskDataField)
+    if (taskDataField.type == DataField.LIST) {
+      return this.taskDataFieldListRepo.find({where: {tdf: {uid}}})
+    }
+    return this.taskDataFieldValueRepo.find({where: {taskDataFieldUId: uid, value: Not("")}, select: {value: true}})
   }
 
   async applyFilter(filter: Filter) {
